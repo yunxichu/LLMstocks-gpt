@@ -37,6 +37,7 @@ References:
 - `references/research-rubric.md` — 16-dim scoring (v0.5: down from 18)
 - `references/pattern-library.md` — 14 reusable patterns
 - `references/a-share-data-sources.md` — yfinance + WebFetch source priority
+- `references/valuation-target-price.md` — target price, EPS bridge, research matrix, and revision triggers
 
 ---
 
@@ -162,6 +163,24 @@ If you cannot name a specific demand shock, the analysis is weak. Mark
 - Current market framing vs alternative framing
 - Forward P/E vs growth path (from `stock_info.trailingPE` + financials growth)
 - Replacement value (from balance sheet)
+
+### Step 9b — Build target price valuation
+
+Use `references/valuation-target-price.md` and `templates/valuation_card.yaml`.
+
+Required:
+
+- Latest filings and financial anchor.
+- 3-5 recent institutional reports or consensus records when authorized access is available.
+- If report access is unavailable, explicitly set `research_report_matrix.status: partial` or `unavailable`.
+- FY2026/FY2027 EPS or net-profit forecast bridge.
+- Primary valuation method + at least one cross-check.
+- External target-price dispersion when available.
+- Base / bull / bear target price.
+- Upward and downward revision triggers.
+- Evidence grades for financials, research reports, industry data, and consensus.
+
+Do not write a research-grade target price unless this section is complete.
 
 ### Step 10 — Bayesian update with current evidence (via WebFetch)
 For each recent (90 day) announcement, news, or filing:

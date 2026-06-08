@@ -38,6 +38,11 @@ HTML 报告（点击式可展开详细分析）。
   (yfinance 字段值 / WebFetch 公告标题+URL+日期 / 公开文件引用)。任何非 hard
   的 claim 必须显式标记 `type: soft` 或 `type: pending_verify`。lock_picks.py
   强制校验。
+- **★ v1.0 target price discipline**:
+  - 每只 AI / market BUY 或 WATCH 必须填写 `target_price_review`。
+  - target price 必须包含研究报告矩阵、FY2026/FY2027 EPS 或净利预测桥、估值方法、目标价分歧、上修/下修触发器、证据等级。
+  - 如果没有至少 3 个可信研报/一致预期输入，`target_price_review.status` 必须是 `provisional`，不能写成 `research_grade`。
+  - 每只 AVOID 必须填写 `valuation_red_flag.fair_value_or_risk_range`，说明为什么现价透支。
 - **★ v0.8 NEW: 3 类约束**
   - `ai_picks` 必须 5 支（或更少有诚实理由），每只 `theme` 必须 ∈ AI_THEMES
   - `market_picks` 必须 5 支，每只 `theme` 必须 ∉ AI_THEMES (或空表示 watchlist)
@@ -55,7 +60,9 @@ HTML 报告（点击式可展开详细分析）。
 3. `references/pattern-library.md` — 14 类模式（用于 strategy 分类）
 4. `references/research-rubric.md` — 单股评分维度（v0.5 16 维）
 5. `references/a-share-data-sources.md` — yfinance + WebFetch 来源
-6. `templates/picks_card.yaml` — 输出模板
+6. `references/valuation-target-price.md` — 目标价 / 估值强制标准
+7. `templates/picks_card.yaml` — 输出模板
+8. `templates/valuation_card.yaml` — 目标价估值子模板
 
 ---
 
@@ -226,6 +233,50 @@ For each candidate, build evidence_log with:
 - "行业政策即将出台" / "美联储将降息" → SOFT
 - "解禁/减持/质押公告" → HARD (公告日期 + URL 已拿到), 但具体规模可能 PENDING_VERIFY 如果未读全文
 
+### Stage 4c: Target price valuation (★ v1.0 强制要求)
+
+For every AI / market candidate that may become BUY or WATCH, build
+`target_price_review` according to `references/valuation-target-price.md`.
+
+Minimum output:
+
+```yaml
+target_price_review:
+  status: research_grade | provisional | unavailable
+  horizon_months: 12
+  current_price: 0.0
+  base_target: 0.0
+  target_range: [0.0, 0.0]
+  upside_pct: 0.0
+  selected_method:
+    primary: PE | PEG | PB_ROE | EV_EBITDA | EV_Sales | DCF | SOTP | other
+    cross_checks: []
+    justification: ""
+  eps_forecast_bridge:
+    latest_actual: {}
+    fy2026_forecast: {}
+    fy2027_forecast: {}
+    bridge_logic: {}
+    confidence: high | medium | low
+  research_report_matrix:
+    status: complete | partial | unavailable
+    reports: []
+  consensus_cross_check: {}
+  revision_triggers:
+    upward: []
+    downward: []
+  evidence_grade: {}
+  open_checks: []
+```
+
+Rules:
+
+- Do not issue a precise target price from `current_price / forward_PE` alone.
+- If Wind / Choice / FactSet / LSEG I/B/E/S / Bloomberg is unavailable, write this explicitly and use `provisional`.
+- Broker research is never copied into the repo. Store only metadata and short paraphrased assumptions.
+- If a BUY has less than 15% upside to base target, it must have `evidence_quality=high`; otherwise route to WATCH.
+- For AVOID candidates, build `valuation_red_flag` with fair-value/risk range, method, and reversal conditions.
+
 ### Stage 5: 选 5 AVOID + 5 AI + 5 全市场 (顺序 important)
 
 **v0.8 selection order**: AVOID 先选 → AI BUY 再选 → 全市场 BUY 最后选 (在
@@ -292,6 +343,9 @@ This validates:
 - ai_picks ∩ market_picks ticker set = ∅
 - `avoid_picks` ≤ 5 + each ≥1 HIGH or ≥2 MEDIUM red flag
 - Every entry has `red_flags_checked = [1..18]` + valid `evidence_log` (≥3 hard)
+- Every AI / market entry has `target_price_review` with status, EPS bridge,
+  research-report matrix, valuation method, target range, and revision triggers
+- Every AVOID entry has `valuation_red_flag.fair_value_or_risk_range`
 - Computes SHA-256 of raw.md, records playbook_version
 - Appends 15 rows to `predictions/picks_index.csv`
 

@@ -76,6 +76,32 @@ ai_picks:
 
     rubric_score: null
 
+    # ★ v1.0 target price valuation review
+    # Must follow playbooks/references/valuation-target-price.md.
+    # BUY/WATCH target prices are provisional unless latest filings + research
+    # matrix + EPS bridge + valuation method + revision triggers are all present.
+    target_price_review:
+      status: "unavailable"    # research_grade | provisional | unavailable
+      horizon_months: 12
+      current_price: null
+      base_target: null
+      target_range: [null, null]
+      upside_pct: null
+      selected_method:
+        primary: ""
+        cross_checks: []
+        justification: ""
+      eps_forecast_bridge: {}
+      research_report_matrix:
+        status: "unavailable"
+        reports: []
+      consensus_cross_check: {}
+      revision_triggers:
+        upward: []
+        downward: []
+      evidence_grade: {}
+      open_checks: []
+
     # 强制红旗扫描记录
     red_flags_checked: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
     red_flags_triggered: []   # BUY: 0 HIGH + ≤1 MEDIUM only
@@ -111,6 +137,28 @@ market_picks:
 
     rubric_score: null
 
+    target_price_review:
+      status: "unavailable"
+      horizon_months: 12
+      current_price: null
+      base_target: null
+      target_range: [null, null]
+      upside_pct: null
+      selected_method:
+        primary: ""
+        cross_checks: []
+        justification: ""
+      eps_forecast_bridge: {}
+      research_report_matrix:
+        status: "unavailable"
+        reports: []
+      consensus_cross_check: {}
+      revision_triggers:
+        upward: []
+        downward: []
+      evidence_grade: {}
+      open_checks: []
+
     red_flags_checked: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
     red_flags_triggered: []
 
@@ -135,6 +183,14 @@ avoid_picks:
 
     entry_close: 0.0
     confidence: 0.0
+
+    valuation_red_flag:
+      fair_value_or_risk_range: [null, null]
+      current_price: null
+      overvaluation_reason: ""
+      method: ""
+      reversal_conditions: []
+      evidence_grade: {}
 
     red_flags_checked: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
     red_flags_triggered:

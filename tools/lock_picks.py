@@ -13,6 +13,8 @@ What it does:
    - BUY 类: 0 HIGH + ≤1 MEDIUM
    - AVOID 类: ≥1 HIGH or ≥2 MEDIUM with evidence
    - evidence_log: ≥3 type='hard' entries per pick
+   - target_price_review for AI / market picks
+   - valuation_red_flag for AVOID picks
    - ai_picks ∩ market_picks ticker set = ∅
 3. Computes SHA-256 of accompanying raw.md
 4. Records playbook_version (git sha of weekly_picks.md)
@@ -61,6 +63,7 @@ REQUIRED_BUY_FIELDS = [
     "key_tracking_indicator", "main_risk",
     "red_flags_checked", "red_flags_triggered",
     "evidence_log",
+    "target_price_review",
 ]
 
 REQUIRED_AVOID_FIELDS = [
@@ -69,6 +72,7 @@ REQUIRED_AVOID_FIELDS = [
     "entry_close", "confidence",
     "red_flags_checked", "red_flags_triggered",
     "evidence_log",
+    "valuation_red_flag",
 ]
 
 PICKS_ID_PATTERN = re.compile(r"^picks-\d{8}-\d{6}$")
@@ -80,6 +84,8 @@ AI_THEMES = {"ai-compute", "optical-cpo", "semi-equipment", "robotics", "domesti
 EVIDENCE_VALID_TYPES = {"hard", "soft", "pending_verify"}
 MIN_HARD_EVIDENCE_PER_PICK = 3
 MAX_PICKS_PER_LIST = 5
+TARGET_PRICE_STATUSES = {"research_grade", "provisional", "unavailable"}
+RESEARCH_MATRIX_STATUSES = {"complete", "partial", "unavailable"}
 
 
 def git_sha_for(path: Path) -> str:
@@ -183,6 +189,150 @@ def validate_evidence_log(evidence_log, label: str) -> list[str]:
     return errors
 
 
+def _positive_number(value) -> bool:
+    try:
+        return float(value) > 0
+    except Exception:
+        return False
+
+
+def validate_target_price_review(review, label: str) -> list[str]:
+    """v1.0 target-price validation for AI / market BUY entries."""
+    errors: list[str] = []
+    if not isinstance(review, dict) or not review:
+        return [f"{label}.target_price_review missing or not a dict"]
+
+    status = review.get("status")
+    if status not in TARGET_PRICE_STATUSES:
+        errors.append(
+            f"{label}.target_price_review.status must be one of "
+            f"{sorted(TARGET_PRICE_STATUSES)}; got {status!r}"
+        )
+    if status == "unavailable":
+        errors.append(
+            f"{label}.target_price_review.status cannot be unavailable for "
+            f"AI / market picks; use provisional if research reports are incomplete"
+        )
+
+    for k in ["current_price", "base_target"]:
+        if not _positive_number(review.get(k)):
+            errors.append(f"{label}.target_price_review.{k} must be > 0")
+
+    target_range = review.get("target_range")
+    if (
+        not isinstance(target_range, list)
+        or len(target_range) != 2
+        or not all(_positive_number(x) for x in target_range)
+    ):
+        errors.append(
+            f"{label}.target_price_review.target_range must be two positive numbers"
+        )
+
+    method = review.get("selected_method")
+    if not isinstance(method, dict) or not (method.get("primary") or "").strip():
+        errors.append(
+            f"{label}.target_price_review.selected_method.primary missing"
+        )
+
+    eps_bridge = review.get("eps_forecast_bridge")
+    if not isinstance(eps_bridge, dict) or not eps_bridge:
+        errors.append(f"{label}.target_price_review.eps_forecast_bridge missing")
+    else:
+        if not isinstance(eps_bridge.get("latest_actual"), dict):
+            errors.append(
+                f"{label}.target_price_review.eps_forecast_bridge.latest_actual missing"
+            )
+        if not (
+            isinstance(eps_bridge.get("fy2026_forecast"), dict)
+            or isinstance(eps_bridge.get("fy2027_forecast"), dict)
+        ):
+            errors.append(
+                f"{label}.target_price_review.eps_forecast_bridge needs "
+                f"fy2026_forecast or fy2027_forecast"
+            )
+
+    matrix = review.get("research_report_matrix")
+    report_count = 0
+    if not isinstance(matrix, dict) or not matrix:
+        errors.append(f"{label}.target_price_review.research_report_matrix missing")
+    else:
+        mstatus = matrix.get("status")
+        if mstatus not in RESEARCH_MATRIX_STATUSES:
+            errors.append(
+                f"{label}.target_price_review.research_report_matrix.status must be "
+                f"one of {sorted(RESEARCH_MATRIX_STATUSES)}; got {mstatus!r}"
+            )
+        reports = matrix.get("reports") or []
+        if isinstance(reports, list):
+            report_count = len(reports)
+        else:
+            errors.append(
+                f"{label}.target_price_review.research_report_matrix.reports "
+                f"must be a list"
+            )
+        if status == "research_grade":
+            if mstatus != "complete":
+                errors.append(
+                    f"{label}.target_price_review is research_grade but "
+                    f"research_report_matrix.status is {mstatus!r}"
+                )
+            if report_count < 3:
+                errors.append(
+                    f"{label}.target_price_review is research_grade but has "
+                    f"only {report_count} report(s); requires >= 3"
+                )
+
+    triggers = review.get("revision_triggers")
+    if not isinstance(triggers, dict):
+        errors.append(f"{label}.target_price_review.revision_triggers missing")
+    else:
+        if not isinstance(triggers.get("upward"), list):
+            errors.append(
+                f"{label}.target_price_review.revision_triggers.upward must be a list"
+            )
+        if not isinstance(triggers.get("downward"), list):
+            errors.append(
+                f"{label}.target_price_review.revision_triggers.downward must be a list"
+            )
+
+    if not isinstance(review.get("evidence_grade"), dict) or not review.get("evidence_grade"):
+        errors.append(f"{label}.target_price_review.evidence_grade missing")
+
+    return errors
+
+
+def validate_valuation_red_flag(red_flag, label: str) -> list[str]:
+    """v1.0 fair-value / overvaluation validation for AVOID entries."""
+    errors: list[str] = []
+    if not isinstance(red_flag, dict) or not red_flag:
+        return [f"{label}.valuation_red_flag missing or not a dict"]
+
+    fair_range = red_flag.get("fair_value_or_risk_range")
+    if (
+        not isinstance(fair_range, list)
+        or len(fair_range) != 2
+        or not all(_positive_number(x) for x in fair_range)
+    ):
+        errors.append(
+            f"{label}.valuation_red_flag.fair_value_or_risk_range must be "
+            f"two positive numbers"
+        )
+    if not _positive_number(red_flag.get("current_price")):
+        errors.append(f"{label}.valuation_red_flag.current_price must be > 0")
+    if not (red_flag.get("overvaluation_reason") or "").strip():
+        errors.append(f"{label}.valuation_red_flag.overvaluation_reason missing")
+    if not (red_flag.get("method") or "").strip():
+        errors.append(f"{label}.valuation_red_flag.method missing")
+    if not isinstance(red_flag.get("reversal_conditions"), list) or not red_flag.get("reversal_conditions"):
+        errors.append(
+            f"{label}.valuation_red_flag.reversal_conditions must have >= 1 entry"
+        )
+    if not isinstance(red_flag.get("evidence_grade"), dict) or not red_flag.get("evidence_grade"):
+        errors.append(f"{label}.valuation_red_flag.evidence_grade missing")
+
+    return errors
+
+
 def validate_pick_entry(entry: dict, verdict: str, idx: int) -> list[str]:
     """Validate one pick entry. verdict ∈ {'ai', 'market', 'avoid'}."""
     errors: list[str] = []
@@ -259,6 +409,16 @@ def validate_pick_entry(entry: dict, verdict: str, idx: int) -> list[str]:
 
     # v0.7: evidence_log
     errors.extend(validate_evidence_log(entry.get("evidence_log"), label))
+
+    # v1.0: valuation discipline
+    if is_buy:
+        errors.extend(
+            validate_target_price_review(entry.get("target_price_review"), label)
+        )
+    else:
+        errors.extend(
+            validate_valuation_red_flag(entry.get("valuation_red_flag"), label)
+        )
 
     # v0.8: theme validation for BUY entries
     if is_buy:

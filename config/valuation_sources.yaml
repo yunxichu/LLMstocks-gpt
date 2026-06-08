@@ -1,0 +1,94 @@
+# Valuation and research-source registry
+# --------------------------------------
+# This file defines which sources are acceptable for research-grade target
+# prices. Do not store paywalled report text or copyrighted tables in this repo.
+
+source_policy:
+  report_text_storage: "forbidden"
+  allowed_research_metadata:
+    - institution
+    - analyst
+    - date
+    - rating
+    - rating_action
+    - target_price
+    - fy2026_eps
+    - fy2027_eps
+    - fy2026_net_profit
+    - fy2027_net_profit
+    - valuation_method
+    - short_paraphrased_assumptions
+  minimum_reports_for_research_grade: 3
+  research_lookback_days: 90
+
+authorized_consensus_databases:
+  - id: wind
+    name: Wind
+    acceptable_fields: [ratings, target_price, eps_forecast, net_profit_forecast, report_metadata, forecast_revision]
+    evidence_type_if_authorized: hard
+    notes: "Requires authorized subscription; record snapshot date."
+  - id: choice
+    name: Choice
+    acceptable_fields: [ratings, target_price, eps_forecast, net_profit_forecast, report_metadata, forecast_revision]
+    evidence_type_if_authorized: hard
+    notes: "Requires authorized subscription; record snapshot date."
+  - id: ifind
+    name: iFinD
+    acceptable_fields: [ratings, target_price, eps_forecast, net_profit_forecast, report_metadata, forecast_revision]
+    evidence_type_if_authorized: hard
+    notes: "Requires authorized subscription; record snapshot date."
+  - id: factset
+    name: FactSet Estimates / Point-in-Time Consensus
+    acceptable_fields: [consensus_eps, consensus_revenue, target_price, revisions, sharp_estimate]
+    evidence_type_if_authorized: hard
+    official_url: "https://insight.factset.com/resources/at-a-glance-factset-estimates-point-in-time-consensus"
+  - id: lseg_ibes
+    name: LSEG I/B/E/S Estimates
+    acceptable_fields: [consensus_eps, consensus_revenue, target_price, analyst_detail, revisions]
+    evidence_type_if_authorized: hard
+    official_url: "https://www.lseg.com/en/data-analytics/financial-data/company-data/ibes-estimates"
+  - id: bloomberg
+    name: Bloomberg
+    acceptable_fields: [consensus, analyst_ratings, target_price, estimates, revisions]
+    evidence_type_if_authorized: hard
+    notes: "Requires terminal/API subscription."
+
+public_primary_sources:
+  - id: cninfo
+    name: CNINFO / 巨潮资讯
+    evidence_type: hard
+    use_for: [annual_reports, quarterly_reports, profit_alerts, investor_records, announcements]
+  - id: sse
+    name: Shanghai Stock Exchange disclosures
+    evidence_type: hard
+    use_for: [announcements, filings]
+  - id: szse
+    name: Shenzhen Stock Exchange disclosures
+    evidence_type: hard
+    use_for: [announcements, filings]
+  - id: sec
+    name: SEC EDGAR
+    evidence_type: hard
+    use_for: [13f, 13d_13g, annual_reports, quarterly_reports]
+    official_url: "https://www.sec.gov/about/developer-resources"
+  - id: hkexnews
+    name: HKEXnews
+    evidence_type: hard
+    use_for: [hk_disclosures, shareholding_disclosures]
+
+public_methodology_sources:
+  - id: cfa_equity_valuation_process
+    name: CFA Institute Equity Valuation process
+    evidence_type: soft
+    official_url: "https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/equity-valuation-applications-and-processes"
+  - id: morningstar_equity_methodology
+    name: Morningstar Equity Research Methodology
+    evidence_type: soft
+    official_url: "https://indexes.morningstar.com/docs/calculation-and-methodology/morningstar-equity-research-methodology"
+
+disallowed_sources:
+  - "document-sharing reposts"
+  - "unverified social-media screenshots"
+  - "financial self-media without original report or filing"
+  - "AI-generated summaries without source chain"
+  - "paywalled report text copied into repo"

@@ -21,6 +21,7 @@ LLMstocks-gpt 要新增：
 - **机构评测轴**：吸收主流机构的评级、估值框架、盈利预测、信用风险、ESG / 治理风险，但不复制或分发受版权保护的研报全文。
 - **顶级投资人轴**：追踪长期业绩强、风格稳定、持仓披露可靠的投资人和基金经理，识别增持、减持、首次建仓、集中度和拥挤交易。
 - **产业链供需轴**：从公司公告、行业协会、海关、统计局、产业组织、上下游上市公司披露中建立“需求、供给、价格、库存、产能、订单”证据链。
+- **研报级估值轴**：每个目标价必须有最新财报锚、3-5 个可信研报/一致预期输入、FY2026/FY2027 EPS 或净利预测桥、估值方法、目标价分歧、上修/下修触发器和证据等级。
 - **综合判断轴**：把上面三类证据与基本面、估值、红旗扫描合并，输出明确的 BUY / WATCH / AVOID 判断及置信度。
 
 ---
@@ -44,6 +45,9 @@ LLMstocks-gpt 要新增：
 
 6. **先做研究系统，再做股票清单**  
    在数据源和评分规则没有落地前，不输出伪精确的强推荐。
+
+7. **目标价必须可审计**  
+   目标价不能只来自 `forward PE` 或单一券商观点。必须说明 EPS/净利如何预测、为什么给这个估值倍数、外部目标价分歧在哪里、哪些财报指标会触发上修或下修。
 
 ---
 
@@ -90,6 +94,18 @@ gpt_scorecard:
   evidence_quality: 0-10
   total: 0-100
   verdict: BUY|WATCH|AVOID
+
+target_price_review:
+  status: research_grade|provisional|unavailable
+  horizon_months: 12
+  base_target: null
+  target_range: [null, null]
+  selected_method: {}
+  eps_forecast_bridge: {}
+  research_report_matrix: {}
+  consensus_cross_check: {}
+  revision_triggers: {}
+  evidence_grade: {}
 ```
 
 ---
@@ -181,6 +197,20 @@ gpt_scorecard:
 - “机构看好”但没有报告日期、评级动作、预测修正。
 - “聪明钱买了”但没有披露文件、季度、仓位变化。
 
+### 4.4 研报级目标价
+
+每只 BUY / WATCH 必须有 `target_price_review`。最低要求：
+
+- 最新年报、季报、业绩预告或投资者关系记录作为财务锚。
+- 最近 90 天 3-5 个可信研报/一致预期输入；若无法取得授权数据，则状态必须标为 `provisional`。
+- FY2026/FY2027 EPS 或净利预测桥，不能只用 `当前价 / forward PE`。
+- 至少一种主估值法和一种交叉验证：PE、PEG、PB-ROE、EV/EBITDA、EV/Sales、DCF、SOTP 等按行业选择。
+- 外部目标价最高/中位/均值/最低，以及自己的 base/bull/bear。
+- 上修和下修触发器。
+- 证据等级：财报、研报、行业数据、一致预期分别标 `hard|soft|pending_verify|unavailable`。
+
+详见 `playbooks/references/valuation-target-price.md` 和 `templates/valuation_card.yaml`。
+
 ---
 
 ## 5. 综合评分与决策
@@ -238,9 +268,11 @@ gpt_scorecard:
 - `playbooks/references/institutional-evidence.md`
 - `playbooks/references/smart-money.md`
 - `playbooks/references/supply-demand.md`
+- `playbooks/references/valuation-target-price.md`
 - `config/source_registry.yaml`
 - `config/super_investors.yaml`
 - `config/industry_chain_map.yaml`
+- `config/valuation_sources.yaml`
 
 验收标准：
 
@@ -252,12 +284,13 @@ gpt_scorecard:
 修改：
 
 - `templates/picks_card.yaml`
+- `templates/valuation_card.yaml`
 - `tools/lock_picks.py`
 - `tools/render_picks_html.py`
 
 验收标准：
 
-- lock 工具强制校验 `institutional_view`、`smart_money`、`supply_demand`、`gpt_scorecard`。
+- lock 工具强制校验 `institutional_view`、`smart_money`、`supply_demand`、`target_price_review`、`gpt_scorecard`。
 - HTML 报告新增三块折叠区：机构、聪明钱、供需链。
 
 ### Phase 3：数据工具层

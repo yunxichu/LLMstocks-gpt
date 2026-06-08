@@ -1,0 +1,113 @@
+# Target price valuation card template
+# Used by /picks and /analyze when a target price, fair-value range, or
+# overvaluation range is produced.
+
+target_price_review:
+  status: "unavailable"        # research_grade | provisional | unavailable
+  horizon_months: 12
+  current_price: null
+  base_target: null
+  target_range: [null, null]
+  upside_pct: null
+  valuation_date: ""
+
+  bear_case:
+    target: null
+    assumptions: []
+  base_case:
+    target: null
+    assumptions: []
+  bull_case:
+    target: null
+    assumptions: []
+
+  selected_method:
+    primary: ""                # PE | PEG | PB_ROE | EV_EBITDA | EV_Sales | DCF | SOTP | NAV | other
+    cross_checks: []
+    justification: ""
+    formula: ""
+
+  eps_forecast_bridge:
+    latest_actual:
+      fiscal_period: ""
+      revenue: null
+      net_profit_parent: null
+      eps: null
+      operating_cash_flow: null
+      gross_margin: null
+      source: ""
+    fy2026_forecast:
+      source_type: ""          # consensus | broker_matrix | internal_model | unavailable
+      revenue: null
+      net_profit_parent: null
+      eps: null
+      gross_margin: null
+      key_drivers: []
+    fy2027_forecast:
+      source_type: ""
+      revenue: null
+      net_profit_parent: null
+      eps: null
+      gross_margin: null
+      key_drivers: []
+    bridge_logic:
+      volume: ""
+      asp: ""
+      margin: ""
+      opex: ""
+      share_count_or_dilution: ""
+      tax_or_minority_interest: ""
+    confidence: "low"          # high | medium | low
+
+  research_report_matrix:
+    status: "unavailable"      # complete | partial | unavailable
+    lookback_days: 90
+    reports:
+      - institution: ""
+        analyst: ""
+        date: ""
+        rating: "unavailable"
+        rating_action: "unavailable"
+        target_price: null
+        fy2026_eps: null
+        fy2027_eps: null
+        fy2026_net_profit: null
+        fy2027_net_profit: null
+        valuation_method: ""
+        core_assumptions: []
+        access: "unavailable"  # authorized_full | public_summary | paywalled_metadata | unavailable
+        evidence_type: "pending_verify"
+        source: ""
+
+  consensus_cross_check:
+    target_mean: null
+    target_median: null
+    target_high: null
+    target_low: null
+    analyst_count: null
+    source: ""
+    snapshot_date: ""
+
+  revision_triggers:
+    upward: []
+    downward: []
+
+  evidence_grade:
+    financials: "pending_verify"
+    research_reports: "unavailable"
+    industry_data: "pending_verify"
+    consensus: "unavailable"
+
+  open_checks: []
+
+valuation_red_flag:
+  fair_value_or_risk_range: [null, null]
+  current_price: null
+  overvaluation_reason: ""
+  method: ""
+  reversal_conditions: []
+  evidence_grade:
+    financials: "pending_verify"
+    research_reports: "unavailable"
+    industry_data: "pending_verify"
+    consensus: "unavailable"
