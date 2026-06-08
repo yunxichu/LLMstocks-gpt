@@ -1,0 +1,199 @@
+# Stock Card Template
+# ====================
+# A single stock prediction card. Claude fills this out by following one of
+# playbooks/long_term.md or playbooks/short_term.md, then writes it under
+# predictions/locked/<date>/<prediction_id>.yaml together with the raw
+# reasoning markdown at <prediction_id>.raw.md. Finally run:
+#
+#   python tools/lock_prediction.py predictions/locked/<date>/<prediction_id>.yaml
+#
+# The lock tool validates the `lock` block, computes the SHA-256 hash of the
+# accompanying raw markdown, fills `lock.claude_output_hash`, and marks the
+# file as immutable (via git tracking + verify_locks.py).
+#
+# NEVER edit a card after it has been locked. Forward-test integrity depends
+# on it.
+
+# Required: which playbook produced this card.
+prediction_type: long_term  # long_term | short_term
+
+# ====================== LOCK AREA (immutable after lock) ======================
+lock:
+  # ID format: <6-digit-code>-<yyyymmdd>-<HHMMSS>-<lt|st>
+  # e.g., 600519-20260608-203015-lt
+  prediction_id: ""
+
+  # ISO 8601 with timezone offset
+  analyzed_at: ""             # e.g., "2026-06-08T20:30:15+08:00"
+
+  # Standardized ticker (with .SH/.SZ/.BJ suffix)
+  ticker: ""                  # e.g., "600519.SH"
+  name: ""                    # e.g., "贵州茅台"
+
+  # Playbook reference (filename + git sha at analysis time)
+  playbook: ""                # e.g., "long_term.md"
+  playbook_version: ""        # git sha; filled by lock_prediction.py
+
+  # Forward-test parameters (前置定义，事后不可改)
+  prediction_horizon_days: 0  # 20 for long_term; 5 for short_term
+  benchmark: ""               # "000300.SH" (沪深 300, v0.5 long-term default) | other; see data/web/benchmark.py BENCHMARK_MAP
+
+  # Entry prices (locked at prediction time)
+  entry_close: 0.0            # stock close on entry_close_date
+  entry_close_date: ""        # most recent trading day at analysis time, yyyy-mm-dd
+  benchmark_entry_close: 0.0  # benchmark close on entry_close_date
+
+  # Criteria for success / failure (写下来才算数)
+  success_criteria: ""        # e.g., "T+20 收盘相对基准超额 > 0%"
+  failure_criteria: ""        # e.g., "T+20 收盘相对基准 < -5% 或个股绝对 < -10%"
+
+  # Conditions that invalidate the prediction mid-flight (close out tracking early)
+  invalidation_conditions: []
+    # Examples:
+    #   - "停牌 > 5 个交易日"
+    #   - "盈利预测下调 > 20%"
+    #   - "突发监管 / 退市风险 / ST"
+    #   - "财务造假 / 关键股东事故"
+
+  # SHA-256 of the accompanying <prediction_id>.raw.md; filled by lock_prediction.py
+  claude_output_hash: ""
+
+  # Optional pointer to data/snapshots/<id>/ if data was snapshotted at analysis time
+  data_snapshot_id: null
+# ====================== END LOCK AREA ======================
+
+# ----------------------------------------------------------------------------
+# LONG-TERM analysis (filled only when prediction_type == long_term)
+# Inspired by Serenity chokepoint method (see playbooks/references/research-rubric.md)
+# ----------------------------------------------------------------------------
+long_term:
+  verdict:
+    thesis: ""               # one-sentence thesis
+    confidence: 0.0          # 0.0 - 1.0
+    tradeable_now: false     # true if ready, false if watchlist-only
+
+  market_context:
+    listing_venue: ""        # 上交所主板 / 深交所主板 / 创业板 / 科创板 / 北交所
+    currency: "CNY"
+    latest_filing_period: ""  # e.g., 2026Q1
+    news_window_checked: ""   # e.g., 2026-04 to 2026-06
+
+  demand_shock:              # 从需求冲击出发，不从代码出发
+    end_market: ""
+    timing: ""               # 2026-2028 加速期 / 立刻 / 长尾
+    why_now: ""
+
+  supply_chain:
+    map: ""                  # buyer/system -> module -> component -> material
+    target_node: ""          # which exact node the company occupies
+
+  chokepoint:                # 真正的卡点判断
+    scarcity: ""             # why supply is scarce
+    switching_qualification_friction: ""  # 客户切换/认证摩擦
+    architecture_specificity: ""          # 架构特定性 / 标准绑定
+    capacity_expansion_constraints: ""    # 扩产物理约束
+
+  evidence:                  # 强证据在前
+    # - claim: ""
+    #   source: ""           # e.g., "2025 年报 P.45" / "巨潮 ABC 公告" / "客户官网"
+    #   strength: ""         # strong | medium | weak
+
+  news_and_disclosure_update:  # 近期消息流证据化（confirming/weakening/noise）
+    # - date: ""
+    #   source: ""
+    #   item: ""
+    #   thesis_impact: ""    # confirming | weakening | noise
+    #   evidence_strength: ""  # strong | medium | weak
+    #   follow_up: ""
+
+  bayesian_update:
+    prior: ""                # 先验：起步时该公司真为卡点的可信度
+    positive_evidence: []
+    negative_evidence: []
+    posterior_direction: ""  # up | down | flat
+    thesis_breaking_evidence: ""  # 什么会反过来破坏 thesis
+
+  financial_quality:
+    roe_5y_median: null      # %
+    revenue_cagr_3y: null    # %
+    fcf_to_netincome: null   # ratio
+    debt_to_assets: null     # %
+
+  valuation:
+    pe_ttm: null
+    pe_historical_percentile: null  # 0-100
+    pb: null
+    valuation_signal: ""     # undervalued | reasonable | stretched
+
+  smart_money:
+    fund_holders_change_qoq: ""  # e.g., "+12 funds Q1 vs Q4"
+    qfii_in_top10: false
+    notable_holders: []      # 知名基金经理 / 社保 / 养老金
+
+  research_consensus:
+    rating_direction: ""     # upgrade | hold | downgrade
+    target_price_median: null
+    target_price_upside_vs_entry: null  # %
+
+  mispricing:                # 定价真空 / 市场错配
+    current_market_framing: ""
+    alternative_framing: ""
+    valuation_gap: ""
+
+  market_microstructure:
+    analyst_coverage: ""     # e.g., "5 brokers in last 90 days"
+    float_liquidity: ""      # e.g., "daily turnover 50M-200M"
+    institutional_ownership_constraints: ""  # 机构是否结构性买不到
+
+  catalysts:
+    near_term: []            # 3 月内可能发生的事件
+    medium_term: []          # 6-12 月
+
+  risks:
+    technical_substitution: ""
+    customer_concentration: ""
+    capacity_expansion_by_rivals: ""
+    dilution_or_financing: ""
+    regulatory_geopolitical: ""
+
+  tracking_indicators: []    # what to watch quarterly
+  reassessment_triggers: []  # when to re-run analysis
+
+# ----------------------------------------------------------------------------
+# SHORT-TERM analysis (filled only when prediction_type == short_term)
+# A-share specific: dragon-tiger list / fund flow / sentiment / catalysts / risk
+# ----------------------------------------------------------------------------
+short_term:
+  verdict:
+    thesis: ""
+    confidence: 0.0
+
+  catalyst:
+    type: ""                 # 龙虎榜机构买入 / 业绩超预期 / 政策预期 / 题材联动
+    description: ""
+    triggered_on: ""         # yyyy-mm-dd
+
+  flow_state:
+    main_force_5d_net: null  # CNY, may be negative
+    main_force_persistence: ""  # "5/10 days positive"
+    lhb_seats_summary: ""    # "1 mech buy, 2 游资 sell, 1 mech sell"
+
+  sentiment_theme:
+    related_theme: ""        # theme id from config/themes.yaml
+    sector_strength: ""      # "ranks 3 of 50 today"
+    leading_stocks: []
+
+  risk_check:
+    price_position_60d: null  # 0-100 percentile in last 60 days
+    recent_anomalies: []     # 涨跌停异动 / 严重打开涨停 / 停牌
+    restriction_window_30d: false  # 解禁/减持 30 日内
+    insider_recent_sells: false
+
+  invalidation: ""           # 什么时候算结论被打破（短线尤其重要）
+
+# ----------------------------------------------------------------------------
+# Common sections
+# ----------------------------------------------------------------------------
+trade_disclosure_status: "thesis_only"  # 个人研究工具，不持仓不下单 (per Serenity convention)
+
+open_checks: []              # facts that need fresh verification before relying on this card

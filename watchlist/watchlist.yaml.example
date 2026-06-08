@@ -1,0 +1,24 @@
+# Watchlist — copy this to watchlist.yaml and edit.
+#
+# Each entry is a dict. Only `ticker` is required.
+# Status values: candidate | analyzed | rejected | re-confirmed
+#
+# Run `python tools/refresh_universe.py` after editing to validate
+# all tickers are reachable via yfinance and produce a universe.csv.
+
+- ticker: 600519.SH
+  theme: ""
+  rationale: "举例：贵州茅台 — 用于验证数据接入端到端"
+  status: candidate
+  added_on: 2026-06-08
+  added_by: manual
+
+- ticker: 002230.SZ
+  theme: ai-compute
+  rationale: "举例：科大讯飞 — AI 大模型 + 语音技术"
+  status: candidate
+  added_on: 2026-06-08
+  added_by: manual
+
+# Tip: 用 `/screen` slash command in Claude Code 自动产出新候选，
+# 这个工作流会append到这个文件。

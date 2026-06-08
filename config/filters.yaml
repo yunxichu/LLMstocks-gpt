@@ -1,0 +1,43 @@
+# Stock universe pre-filtering rules
+# Run `python tools/refresh_universe.py` to regenerate watchlist/universe.csv
+
+# === Liquidity ===
+min_avg_amount_60d: 50000000      # 60-day average daily turnover, CNY (~50M)
+min_market_cap: 3000000000        # total market cap, CNY (3B)
+
+# === Listing age ===
+min_listing_days: 365             # at least ~1.5 trading years since IPO
+
+# === Exclude flags ===
+exclude_st: true                  # ST / *ST / 退市风险警示
+exclude_suspended: true           # currently suspended
+exclude_recent_loss_quarters: 2   # exclude if last N quarters are net loss (long-term only)
+
+# === Markets to include ===
+# Ticker prefix mapping:
+#   60xxxx  = 上交所主板 (sh_main)
+#   00xxxx  = 深交所主板 (sz_main)
+#   30xxxx  = 创业板    (chinext)
+#   68xxxx  = 科创板    (star)
+#   8xxxxx  = 北交所    (bj_se)
+markets:
+  - sh_main
+  - sz_main
+  - chinext
+  - star
+  # - bj_se        # 暂排除；启用前请通过 PLAN.md §9.2 待决策评审
+
+# === Special exclusions ===
+exclude_tickers: []               # custom blacklist, e.g., ["600519.SH"]
+exclude_industries: []            # e.g., ["银行", "保险"] to skip whole industries
+
+# === Output ===
+output_csv: watchlist/universe.csv
+include_columns:
+  - ticker
+  - name
+  - industry
+  - market_cap
+  - avg_amount_60d
+  - listing_date
+  - is_st

@@ -1,0 +1,2 @@
+prediction_id,analyzed_at,ticker,name,playbook,horizon_days,benchmark,entry_close,entry_close_date,yaml_path
+600519-20260608-173105-lt,2026-06-08T17:31:05+08:00,600519.SH,贵州茅台 (KWEICHOW MOUTAI),long_term.md,20,000300.SH,1262.98,2026-06-08,predictions/locked/2026-06-08/600519-20260608-173105-lt.yaml

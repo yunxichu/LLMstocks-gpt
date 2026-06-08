@@ -1,0 +1,174 @@
+prediction_type: long_term
+lock:
+  prediction_id: 600519-20260608-173105-lt
+  analyzed_at: '2026-06-08T17:31:05+08:00'
+  ticker: 600519.SH
+  name: 贵州茅台 (KWEICHOW MOUTAI)
+  playbook: long_term.md
+  playbook_version: c1a7dff013106b5f178c8f8426c07bd64f4908a1
+  prediction_horizon_days: 20
+  benchmark: 000300.SH
+  entry_close: 1262.98
+  entry_close_date: '2026-06-08'
+  benchmark_entry_close: 4713.6357
+  success_criteria: T+20 收盘相对沪深 300 超额 > 0%
+  failure_criteria: T+20 收盘相对沪深 300 超额 < -5% 或个股绝对收益 < -10%
+  invalidation_conditions:
+  - 停牌 > 5 个交易日
+  - 突发监管 / 退市风险 / ST 警示
+  - 重大财务造假 / 审计被质疑
+  - 出现大额减持公告（占流通股 > 1%）
+  - Q2 业绩快报或预告显示营收同比 < -5% 或净利同比 < -10%
+  - 董事长 / 总经理异常离任（非定期换届）
+  claude_output_hash: a268af40bf2c6059145529181dd36f3b86ea87c5018f602153b0d92032feafed
+  data_snapshot_id: null
+long_term:
+  verdict:
+    thesis: 罕见的地理+品牌+工艺护城河复利型资产，但不是 Serenity-style chokepoint 候选；2025 增长拐点已现，T+20
+      缺乏跑赢沪深 300 的明确催化
+    confidence: 0.42
+    tradeable_now: false
+  market_context:
+    listing_venue: 上交所主板
+    currency: CNY
+    latest_filing_period: 2026Q1
+    news_window_checked: 2026-03 to 2026-06 (via 新浪财经公告页)
+  demand_shock:
+    end_market: 高端白酒消费
+    timing: 消费下行末期 / 复苏未明
+    why_now: 2025Q4 营收 -19.4% 断崖；2026Q1 +6.3% 反弹但远低于历史 15-20%。结构性压制（消费降级 + 反腐败 + Z
+      世代饮酒下降）。非 chokepoint demand acceleration
+  supply_chain:
+    map: N/A — 茅台是终端品牌，不在产业链节点
+    target_node: 终端品牌（地理+品牌+工艺三重 MOAT）
+  chokepoint:
+    scarcity: 地理稀缺：仅赤水河流域微生态可产；窖池菌群百年积累
+    switching_qualification_friction: N/A — 消费品，无 B2B 切换
+    architecture_specificity: 无技术架构
+    capacity_expansion_constraints: 窖池数量物理约束，扩产慢
+  evidence:
+  - claim: 2025 全年营收 172.05B 同比 -1.2%（首次下滑）
+    source: yfinance income statement (annual)
+    strength: strong
+  - claim: 2025 全年净利 82.32B 同比 -4.5%
+    source: yfinance income statement (annual)
+    strength: strong
+  - claim: 2025Q4 单季营收 41.15B vs 2024Q4 51.02B (-19.4%)
+    source: yfinance quarterly income
+    strength: strong
+  - claim: 2026Q1 营收 54.70B (+6.3% YoY)，净利 27.24B (+1.5% YoY)
+    source: yfinance quarterly income
+    strength: strong
+  - claim: 2025 净利率 47.8%, ROE 33.6%, 总负债 0.23B（近零）
+    source: yfinance balance + computed
+    strength: strong
+  - claim: 2025 FCF 58.39B, FCF/NI 71%（vs 2024 的 102%）
+    source: yfinance cashflow
+    strength: medium
+  - claim: 公司在执行股票回购（2026-05-08 / 2026-05-28 公告）
+    source: 新浪财经公告页 (vip.stock.finance.sina.com.cn)
+    strength: strong
+  - claim: 2025 年度分红方案已实施（2026-06-03）
+    source: 新浪财经公告页
+    strength: strong
+  - claim: 5 月多项董事 / 高管任免（含董事长相关）
+    source: 新浪财经公告页（2026-05-22）
+    strength: medium
+  news_and_disclosure_update:
+  - date: '2026-04-17'
+    source: 新浪/巨潮
+    item: 2025 年报 + 分红预案
+    thesis_impact: weakening (增速) + confirming (分红)
+    evidence_strength: strong
+    follow_up: 已分析
+  - date: '2026-04-25'
+    source: 新浪/巨潮
+    item: 2026 Q1 报
+    thesis_impact: confirming (温和恢复)
+    evidence_strength: strong
+    follow_up: 已分析
+  - date: 2026-05-08 / 2026-05-28
+    source: 新浪财经
+    item: 关于回购实施进展
+    thesis_impact: confirming (管理层信心)
+    evidence_strength: strong
+    follow_up: 跟踪回购规模与完成度
+  - date: '2026-05-22'
+    source: 新浪财经
+    item: 董事 / 高管多项任免
+    thesis_impact: needs verify
+    evidence_strength: medium
+    follow_up: 是否包括董事长异常离任？open_check
+  - date: '2026-06-03'
+    source: 新浪财经
+    item: 2025 年度分红实施方案 + 股东大会决议
+    thesis_impact: confirming
+    evidence_strength: strong
+    follow_up: 已分析
+  bayesian_update:
+    prior: 0.6 — 茅台一贯被视为 A 股最高质量资产
+    positive_evidence:
+    - 2026Q1 增速恢复 (+6.3% rev, +1.5% NI)
+    - 公司在执行回购（reduces float + 估值信号）
+    - 分红方案及时实施
+    - 财务质量未变（净利率 47.8% / ROE 33.6% / 近零负债）
+    negative_evidence:
+    - 2025 为 5+ 年来首次年度营收同比下滑
+    - 2025Q4 单季营收 -19.4% YoY 断崖式信号
+    - 2026Q1 +6.3% 远低于历史 15-20% 趋势
+    - 净利率 -1.7pp（49.5% → 47.8%）
+    - FCF/NI 从 102% 降到 71%
+    posterior_direction: down (0.6 → 0.45)
+    thesis_breaking_evidence: Q2 营收增速继续 <5%；董事长异常离任；大额减持公告；单季净利率破 45%
+  financial_quality:
+    roe_5y_median: 33.6
+    revenue_cagr_3y: 10.5
+    fcf_to_netincome: 0.71
+    debt_to_assets: 0.0008
+  valuation:
+    pe_ttm: 19.18
+    pe_historical_percentile: null
+    pb: 5.83
+    valuation_signal: compressed but not vacuum
+  smart_money: null
+  research_consensus: null
+  mispricing:
+    current_market_framing: 白酒消费高峰已过的旧白马，估值被情绪压制
+    alternative_framing: 全球罕见品牌护城河 + 4% 股息 + 持续回购被市场情绪过度悲观定价
+    valuation_gap: 19x PE for 33% ROE / 48% NM / 零负债，轻微 mispriced 但非 pricing vacuum
+  market_microstructure:
+    analyst_coverage: 极度饱和（无 information edge）
+    float_liquidity: 万亿市值 + 日均成交 30-50 亿 — 不是 pricing vacuum
+    institutional_ownership_constraints: 已是机构重仓，无 rotation 空间
+  catalysts:
+    near_term:
+    - 中报披露（约 2026-08 下旬）
+    - 回购进度公告
+    - 一批价 / 出厂价信息（白酒行业景气标）
+    medium_term:
+    - 消费复苏验证 / 证伪
+    - 高端白酒批发价企稳信号
+    - 出口 / 国际化进展
+  risks:
+    technical_substitution: 无
+    customer_concentration: 经销渠道分散，无集中风险
+    capacity_expansion_by_rivals: 五粮液 / 国窖 直接竞品但护城河相对弱
+    dilution_or_financing: 无（反向：在回购）
+    regulatory_geopolitical: 消费税调整 / 反腐败常态化 / 年轻人饮酒下降趋势
+  tracking_indicators:
+  - 季度营收增速（回到 +8% 以上为正信号）
+  - 季度净利率（保持 47%+ 为正信号）
+  - 回购规模与完成度
+  - 茅台一批价（白酒行业景气指标）
+  reassessment_triggers:
+  - 2026 Q2 报披露（约 8 月下旬）
+  - 高管离职 / 减持公告
+  - 一批价持续向下破底
+short_term: null
+trade_disclosure_status: thesis_only
+open_checks:
+- 5 月高管 / 董事变动具体内容（是否含董事长异常离任）— 待 manual 查原文
+- 巨潮 WebFetch 失败（JS SPA）— 已用新浪财经替代；建议在 announcement.py 加入新浪 URL helpers
+- 公募 / 北向 / 研报数据 v0.5 不可得；smart_money + research_consensus 维度缺失
+- 回购规模 / 进度具体金额未拉
+- 2025Q3 季度数据 yfinance 缺失（NaN）

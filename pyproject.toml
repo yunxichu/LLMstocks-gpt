@@ -1,0 +1,54 @@
+[project]
+name = "llmstocks-gpt"
+version = "0.5.0"
+description = "Upgraded A-share research workflow based on LLMstocks: Claude Code playbooks, locked forward tests, institutional views, smart-money holdings, and supply-demand evidence."
+readme = "PLAN.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "yunxichu"}
+]
+
+dependencies = [
+    "yfinance>=0.2.40",
+    "pandas>=2.0.0",
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0.0",
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+    "pydantic>=2.0.0",
+    "python-dateutil>=2.8.0",
+]
+
+[project.optional-dependencies]
+# V2 path (when adding境内 MCP proxy): China-mainland-only data sources.
+# Requires境内 deployment or VPN分流 (NO_PROXY for eastmoney.com / sina.com.cn).
+# Currently NOT loaded by v0.5 active code paths.
+ashare-legacy = [
+    "akshare>=1.13.0",
+]
+tushare = [
+    "tushare>=1.4.0",
+]
+dev = [
+    "pytest>=7.4.0",
+    "ruff>=0.1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["data", "tools"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

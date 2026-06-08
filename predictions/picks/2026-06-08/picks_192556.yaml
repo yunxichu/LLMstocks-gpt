@@ -1,0 +1,489 @@
+prediction_type: weekly_picks
+lock:
+  picks_id: picks-20260608-192556
+  analyzed_at: '2026-06-08T19:25:56+08:00'
+  playbook: weekly_picks.md
+  playbook_version: e6bc53936d4889050e1a66ffad3079be5cda4bc7
+  prediction_horizon_days: 20
+  benchmark: 000300.SH
+  benchmark_entry_close: 4713.6357
+  entry_close_date: '2026-06-08'
+  candidate_pool_size: 49
+  short_list_size: 14
+  red_flag_categories_scanned:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  success_criteria: 'BUY: T+20 个股相对沪深 300 超额 > 0%；AVOID: T+20 个股跑输沪深 300'
+  failure_criteria: 'BUY: T+20 超额 < -5% 或个股 < -10%；AVOID: T+20 超额 > +5%'
+  invalidation_conditions:
+  - 个股停牌 > 5 个交易日（提前结案）
+  - 突发监管 / 退市风险 / ST 警示
+  - 重大财务造假 / 审计被质疑
+  - 对 AVOID：个股出现明显反转（重磅利好公告 + 持续涨停后维持高位）
+  - Q2 业绩预告披露与现 thesis 矛盾
+  claude_output_hash: 608ebf277dc05731413785da5024a5e94effec1bdca3fbcac18dddae75423dde
+  data_snapshot_id: null
+market_context:
+  one_line: 沪深 300 在 4713 宽幅震荡；AI 算力/光通信龙头进入分歧期（中际旭创 60 日 +108%、寒武纪 +69.7%）；储能/电力设备/软件经过
+    4-5 月调整估值压回低位（阳光电源 -13.7%、思源电气 -19.6%、金山办公 -20.9%）。整体：高位 AI 题材进入风险释放，低位质量进入价值挖掘。
+  active_themes:
+  - ai-compute (高分歧期)
+  - optical-cpo (高位过热)
+  - energy-storage (估值压回)
+  - robotics (企稳)
+  - domestic-software (调整充分)
+  recent_significant_events:
+  - 中际旭创 5-29 大额定增预案 (高位稀释信号)
+  - 中天科技 5-9 异动公告 (监管关注海缆+数据中心炒作)
+  - 宁德时代 5-11 限售股解禁
+  us_leaders_observed: []
+buy_picks:
+- rank: 1
+  ticker: 300274.SZ
+  name: 阳光电源
+  strategy: QUALITY_COMPOUNDER
+  pattern_matched: A.5 Infrastructure Bottleneck Outside Semis (AI 数据中心电力)
+  thesis: 光伏逆变器+储能 PCS 双龙头，PE 25.3 + ROE 25% + 净利率 50%+ + FCF 健康。基本面/估值/红旗三重清空，当下最干净的
+    BUY 候选。
+  why_now: 60 日 -13.7% 后估值压回中位；储能 GW 级订单 + 数据中心 HVDC 跨界 → 多重 catalyst；市场尚未充分重定价。
+  entry_close: 146.8
+  key_tracking_indicator: 季度储能业务收入占比（突破 40% 是质变信号）
+  main_risk: 海外光伏装机增速回落 + 储能行业价格战压制毛利
+  confidence: 0.72
+  rubric_score: null
+  red_flags_checked:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  red_flags_triggered: []
+- rank: 2
+  ticker: 601138.SH
+  name: 工业富联
+  strategy: CHOKEPOINT
+  pattern_matched: A.7 Small-Cap Demand Shock Translation + A.4 Capacity With Strategic
+    Backstop
+  thesis: AI 服务器整机 + 富士康背景，全球 NVIDIA H/B/GB 系列服务器主要代工方之一；PE 34.4 + ROE 24.3% + 营收
+    3y CAGR +21% + 2025 YoY +48%。AI 算力硬件总集卡点。
+  why_now: 北美云厂商 2026 资本开支再上台阶；国内 GPU 国产化（H20/昇腾）带动整机；2026Q1 业绩预告高增长；员工持股 + 资本开支扩张。
+  entry_close: 70.48
+  key_tracking_indicator: 季度 AI 服务器收入占比 + 北美客户订单披露
+  main_risk: 北美关税/制裁出口管制升级（黑天鹅）; 单一 NVIDIA 依赖度过高
+  confidence: 0.68
+  rubric_score: null
+  red_flags_checked:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  red_flags_triggered: []
+- rank: 3
+  ticker: 688111.SH
+  name: 金山办公
+  strategy: QUALITY_COMPOUNDER
+  pattern_matched: A.6 Forward-TAM Compounder (WPS AI 商业化)
+  thesis: 国产办公软件龙头 WPS。PE 28.7 + ROE 26.9% + FCF/NI 142% 现金质量极佳 + 营收 3y CAGR 15%。AI
+    接入办公场景的核心 A 股标的。
+  why_now: 60 日 -20.9% 调整后估值压到 PE 28.7（历史中下位）；股权激励行权计划落地锁定团队；Q1 业绩预告；信创长期主题。
+  entry_close: 223.85
+  key_tracking_indicator: 订阅服务 ARR 增速 + WPS AI 渗透率
+  main_risk: 董事长变更性质待 verify (open_check); AI 商业化进度不达预期
+  confidence: 0.62
+  rubric_score: null
+  red_flags_checked:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  red_flags_triggered:
+  - category: 11 关键管理层变动
+    severity: LOW
+    evidence: 2026-06-02 公告：董事长职位变更（性质未明确，可能定期换届或异常离任）
+    detection_method: WebFetch:新浪财经公告页
+- rank: 4
+  ticker: 601689.SH
+  name: 拓普集团
+  strategy: CHOKEPOINT
+  pattern_matched: A.2 Architecture Transition Supplier (Tesla Optimus 量产)
+  thesis: 人形机器人零部件 + 汽车零部件双轮；直接对接 Tesla Optimus 量产供应链。PE 42.6 + ROE 11.7% + 营收 3y
+    CAGR 22.8% + OCF/NI 140%。
+  why_now: 60 日 +5.7% 温和走势, 估值未过热；机器人主题 6 月企稳重启；Tesla 量产时间表多次表态；拓普是 A 股最直接的 Tesla
+    机器人零部件供应商之一。
+  entry_close: 68.1
+  key_tracking_indicator: Tesla Optimus 量产进度披露 + 公司机器人业务收入占比从 ~2% 提升到 5%+
+  main_risk: Tesla Optimus 量产反复推迟; 机器人零部件竞争加剧
+  confidence: 0.65
+  rubric_score: null
+  red_flags_checked:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  red_flags_triggered: []
+- rank: 5
+  ticker: 002028.SZ
+  name: 思源电气
+  strategy: SPECIAL_SITUATION
+  pattern_matched: A.5 Infrastructure Bottleneck Outside Semis (AI 数据中心电力)
+  thesis: 电力变压器 / 开关柜 + 数据中心 HVDC 受益。PE 42.9 + ROE 22.7% + 营收 3y CAGR 26.9% + 最新 YoY
+    +39%。AI 数据中心电力建设核心受益但尚未被市场充分定价。
+  why_now: 60 日 -19.6% 调整后估值压回；AI 数据中心电力建设是 2026-2028 确定性主题；海外 HVDC 持续突破；Q1 业绩预告。
+  entry_close: 177.59
+  key_tracking_indicator: 数据中心电力业务收入披露 + 海外营收占比
+  main_risk: 解禁规模具体不详（open_check）; 主题催化未来 1-2 季度若无更明确 catalyst, T+20 跑赢难度高
+  confidence: 0.58
+  rubric_score: null
+  red_flags_checked:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  red_flags_triggered:
+  - category: 6 大额解禁压力
+    severity: MEDIUM
+    evidence: 2026-05-11 公告：解禁相关披露（规模具体不详，需 manual 复核）
+    detection_method: WebFetch:新浪财经公告页
+avoid_picks:
+- rank: 1
+  ticker: 688256.SH
+  name: 寒武纪
+  primary_concern: OVERHEATED
+  concern_summary: 估值极端 (PE 291x) + 现金流为负 (OCF/NI -24%) + 60 日 +69.7% 暴涨；A 股 AI 算力最热散户标的。
+  evidence: yfinance trailingPE = 291.5; yfinance cashflow OCF/NI 4 年均值 = -24.2%;
+    yfinance history 60d return = +69.7%; 新浪财经公告 2026-05-23 募投资金运用进展 + 多项股权激励 (稀释)
+  why_retail_temptation: 唯一国产 AI 训练芯片设计公司，散户视为'中国 NVIDIA'对标股；近 6 个月财经媒体强力宣传；60 日 +69.7%
+    涨幅形成 FOMO 效应。
+  what_would_reverse: H100/H20 国产替代客户实际大额订单确认 + 业绩拐点（OCF 转正且增长持续）
+  entry_close: 1250.36
+  confidence: 0.78
+  red_flags_checked:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  red_flags_triggered:
+  - category: 17 估值过热
+    severity: HIGH
+    evidence: PE 291x（远超 A 股芯片设计公司合理区间） + 近 60 日 +69.7% 涨幅
+    detection_method: yfinance
+  - category: 2 现金流-净利严重背离
+    severity: HIGH
+    evidence: 4 年 OCF/NI 均值 -24.2%（经营性现金流长期为负，与会计净利严重背离）
+    detection_method: yfinance
+  - category: 18 散户狂热
+    severity: MEDIUM
+    evidence: AI 题材高热度 + 财经媒体反复推荐 + 散户讨论密度极高（定性）
+    detection_method: WebFetch:行业新闻
+  - category: 12 可转债 / 定增稀释
+    severity: MEDIUM
+    evidence: 2026-05-23 公告：2022 年向特定对象发行 A 股募集资金运用进展 + 4-29 股权激励
+    detection_method: WebFetch:新浪财经公告页
+- rank: 2
+  ticker: 300308.SZ
+  name: 中际旭创
+  primary_concern: OVERHEATED
+  concern_summary: 60 日 +108.5% 极端涨幅 + 公司同期披露大额定增预案 + 董事会多人改组。多重高位风险叠加。
+  evidence: yfinance history 60d return = +108.5%; 新浪财经公告 2026-05-29 / 06-05 非公开发行股票预案;
+    2026-05-28 战略/薪酬/审计委员会多份董事高管选举公告; PE 85.9 x
+  why_retail_temptation: 全球光模块龙头 + CPO/800G/1.6T 题材标杆；'AI 算力受益第一线'叙事；市值已 1.28 万亿仍有散户入场。
+  what_would_reverse: 定增价格远高于当前价（说明大资金认可）+ 大客户订单显著超预期；但当前位置即使利好兑现弹性已透支
+  entry_close: 1154.99
+  confidence: 0.75
+  red_flags_checked:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  red_flags_triggered:
+  - category: 17 估值过热
+    severity: HIGH
+    evidence: 近 60 日累计涨幅 +108.5%，光模块板块历史极端涨幅水平；PE 85.9x
+    detection_method: yfinance
+  - category: 12 可转债 / 定增稀释
+    severity: MEDIUM
+    evidence: 2026-05-29 + 06-05 公告：非公开发行股票预案 + 董事会预案 (大额定增稀释)
+    detection_method: WebFetch:新浪财经公告页
+  - category: 11 关键管理层变动
+    severity: MEDIUM
+    evidence: 2026-05-28 战略/薪酬/审计委员会多份董事和高管选举公告（多人同期改组）
+    detection_method: WebFetch:新浪财经公告页
+- rank: 3
+  ticker: 600118.SH
+  name: 中国卫星
+  primary_concern: VALUATION_ABSURD
+  concern_summary: PE 8220x（八千倍）+ ROE 0.1% + OCF/NI -172%。基本面与估值严重脱节，纯靠卫星互联网/低空经济题材撑着。
+  evidence: yfinance trailingPE = 8220.0; yfinance returnOnEquity = 0.1%; yfinance
+    cashflow OCF/NI 4y avg = -172.7%; yfinance income 营收 3y CAGR = -9.5% (持续下滑); 新浪财经
+    2026-05-19 股权转让及解禁公告
+  why_retail_temptation: '''中国版 SpaceX''、''卫星互联网'' 反复炒作 + ''国之重器''叙事 + 名称''中国''光环；散户对军工/航天股有非理性偏好。'
+  what_would_reverse: 卫星互联网订单转化为实际营收 + 利润双增（需连续 2 个季度确认）— 在那之前不可碰
+  entry_close: 82.2
+  confidence: 0.7
+  red_flags_checked:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  red_flags_triggered:
+  - category: 17 估值过热
+    severity: HIGH
+    evidence: PE 8220x，几乎是 A 股估值最极端的标的之一；ROE 仅 0.1% 无法支撑
+    detection_method: yfinance
+  - category: 2 现金流-净利严重背离
+    severity: HIGH
+    evidence: 4 年 OCF/NI 均值 -172.7%（经营现金流深度长期为负）
+    detection_method: yfinance
+  - category: 6 大额解禁压力
+    severity: MEDIUM
+    evidence: 2026-05-19 公告：股权转让及解禁相关公告（规模待 verify）
+    detection_method: WebFetch:新浪财经公告页
+- rank: 4
+  ticker: 600536.SH
+  name: 中国软件
+  primary_concern: EARNINGS_RISK
+  concern_summary: OCF/NI -1043% 极端财务恶化 + ROE -15.3% / 4.8% 波动大 + 营收 3y CAGR -19%
+    持续萎缩 + 关联交易频繁。
+  evidence: yfinance cashflow OCF/NI 4y avg = -1043.4%; yfinance returnOnEquity 近期
+    -15.3%; yfinance income 营收 3y CAGR = -19.1%; 新浪财经 2026-04-24 多份关联方交易公告 + 多项董事/高管/监事会任职变动
+  why_retail_temptation: 信创老牌龙头（CTSI 体系内）；'国产替代'题材必被炒作；'中国'+'软件'双国资光环；散户认知度极高。
+  what_would_reverse: OCF 显著转正 + 营收止跌 + 关联交易占比下降（需 2 个季度以上确认）
+  entry_close: 35.56
+  confidence: 0.7
+  red_flags_checked:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  red_flags_triggered:
+  - category: 2 现金流-净利严重背离
+    severity: HIGH
+    evidence: 4 年 OCF/NI 均值 -1043.4%（极端异常，远超 -50% 的 HIGH 阈值）
+    detection_method: yfinance
+  - category: 8 关联交易 / 资金占用
+    severity: MEDIUM
+    evidence: 2026-04-24 多份关联方交易公告（数量异常多）
+    detection_method: WebFetch:新浪财经公告页
+  - category: 11 关键管理层变动
+    severity: MEDIUM
+    evidence: 2026-04-24 多项董事/高管/监事会任职变动公告
+    detection_method: WebFetch:新浪财经公告页
+- rank: 5
+  ticker: 600522.SH
+  name: 中天科技
+  primary_concern: OVERHEATED
+  concern_summary: 60 日 +65% 涨幅 + 5-9 监管异动公告 + 融资余额持续上行。海缆 + 数据中心电力概念叠加炒作，基本面无法支撑。
+  evidence: yfinance history 60d return = +65.0%; 新浪财经 2026-05-09 公告 '股票交易异常波动说明';
+    多次 '融资融券信息更新'; 营收 3y CAGR 9.2% + ROE 8.6% (基本面无法支撑 65% 涨幅); PE 52.7x
+  why_retail_temptation: 海底电缆龙头 + 数据中心电力 + AI 题材三重叠加；'中国制造 AI 算力基础设施'叙事；5 月最热门标的之一。
+  what_would_reverse: 海缆订单或数据中心 PCS 业务出现 hard catalyst（具体订单 + 季度营收 > 30%）— 在那之前涨幅已透支
+  entry_close: 49.53
+  confidence: 0.65
+  red_flags_checked:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  red_flags_triggered:
+  - category: 17 估值过热
+    severity: HIGH
+    evidence: 近 60 日 +65%，公司主动披露 2026-05-09 '股票交易异常波动说明'（监管关注信号）
+    detection_method: yfinance + WebFetch:新浪财经
+  - category: 18 散户狂热
+    severity: MEDIUM
+    evidence: 多次'融资融券信息更新'公告显示融资余额持续上行 + 异动公告反映散户疯狂入场
+    detection_method: WebFetch:新浪财经公告页
+selection_process:
+  candidate_pool_sources:
+  - watchlist: 2
+  - themes: 47
+  - us_leaders_mapping: 0
+  - news_hot_stocks: 0
+  - earnings_outliers: 0
+  short_list_rationale: Stage 2 yfinance 批量初评后修正 8 个 ST 误判 (yfinance 英文名含 'INSTRUMENT'/'INDUSTRY'/'SYSTEMS'
+    子串)。按修正后 initial_score 选 TOP 7 BUY 候选 + BOTTOM 7 AVOID 候选 + 1 个高分但过热标 (中际旭创 score
+    70 但 60 日 +108%) = 14 只短列表。全部 14 只 WebFetch 新浪财经公告页成功。
+  excluded_high_score_buy:
+  - ticker: 603259.SH
+    reason: '药明康德 (score 80): 2026-05-15 67.8 亿可转债 (#12 MEDIUM) + H 股密集公告 (重大事件不确定性)，本期不进
+      BUY'
+  - ticker: 300750.SZ
+    reason: '宁德时代 (score 75): 5-11 解禁 + 4-23 股权质押提示 + 多次债券发行 + 高管变动，累积 1 MEDIUM +
+      多 LOW，边缘'
+  - ticker: 300394.SZ
+    reason: '天孚通信 (score 85): PE 152x 过高 + 同处光通信高位区'
+  - ticker: 300502.SZ
+    reason: '新易盛 (score 80): 60 日 +84.4% 高位 + PE 71x'
+  - ticker: 002463.SZ
+    reason: '沪电股份 (score 75): 60 日 +78.2% 严重过热，实际更接近 AVOID 候选'
+  excluded_low_score_avoid:
+  - ticker: 688631.SH
+    reason: '莱斯信息 (score 10): 真低分但市值小 (~92 亿) 知名度低，散户少踩'
+  - ticker: 002405.SZ
+    reason: '四维图新 (score 20): OCF -213% 严重但知名度低于中国卫星 / 中国软件'
+  - ticker: 688375.SH
+    reason: '国博电子 (score 40): 营收下滑但知名度低'
+trade_disclosure_status: thesis_only
+open_checks:
+- 金山办公 2026-06-02 董事长变更：需 manual 查公告原文确认是否定期换届或异常离任
+- 思源电气 2026-05-11 解禁规模：WebFetch 公告未给具体数字，需 verify 是否占流通股 > 5%
+- 巨潮 SPA WebFetch 仍失败（已用新浪财经替代成功 14/14）
+- 49 候选中 8 个 ST 误判 (yfinance 英文名子串问题)，已手动修正；建议下次脚本用 startswith('ST ') 或 '*ST' in name
+  而非 'ST' in name
+- 公募季报 / 北向季度持仓 / 研报评级 v0.5 不可得（V2 deferred）
+- 本次未用美股龙头映射 + 财联社热点扩展候选池（节约 token）

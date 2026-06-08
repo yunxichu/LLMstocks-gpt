@@ -1,0 +1,192 @@
+# A-share themes / sectors registry
+# ----------------------------------
+# Used by /picks (Stage 1 候选池构建) and as upstream signals in /analyze.
+#
+# Each theme provides:
+#   - id, name_zh, description, keywords (for search)
+#   - layers: supply-chain layers (upstream -> downstream), conceptual
+#   - representative_tickers: concrete A-share tickers per theme/layer
+#     This is the candidate-pool seed. Maintain manually; add新 tickers when
+#     a sector matures or new themes emerge.
+#
+# Each ticker tagged with the layer it occupies for chokepoint mapping.
+
+themes:
+  - id: ai-compute
+    name_zh: AI 算力
+    description: AI 大模型训练/推理算力供应链
+    keywords: [AI 服务器, 算力, 大模型, HBM, 推理芯片, 液冷]
+    layers:
+      - 上游材料 (硅片/化学品/特气)
+      - 芯片设计与代工
+      - HBM/先进封装
+      - PCB/连接器/PCIe
+      - 服务器整机
+      - 数据中心/IDC
+    representative_tickers:
+      - { ticker: 688256.SH, name: 寒武纪,    layer: 芯片设计 }
+      - { ticker: 688041.SH, name: 海光信息,  layer: 芯片设计 (CPU/DCU) }
+      - { ticker: 601138.SH, name: 工业富联,  layer: 服务器整机 }
+      - { ticker: 000977.SZ, name: 浪潮信息,  layer: 服务器整机 }
+      - { ticker: 603019.SH, name: 中科曙光,  layer: 服务器整机 }
+      - { ticker: 002463.SZ, name: 沪电股份,  layer: PCB }
+
+  - id: optical-cpo
+    name_zh: 光通信 / CPO
+    description: 光模块、光器件、CPO 共封装光学
+    keywords: [光模块, CPO, 硅光, 800G, 1.6T, 激光器, 光纤]
+    layers:
+      - 衬底/外延片 (InP/磷化铟)
+      - 激光器/光芯片
+      - 光器件/FAU
+      - 光模块组装
+      - 测试设备
+      - 光纤/电缆
+    representative_tickers:
+      - { ticker: 300308.SZ, name: 中际旭创,  layer: 光模块组装 }
+      - { ticker: 300502.SZ, name: 新易盛,    layer: 光模块组装 }
+      - { ticker: 300394.SZ, name: 天孚通信,  layer: 光器件/FAU }
+      - { ticker: 300620.SZ, name: 光库科技,  layer: 光器件 }
+      - { ticker: 688313.SH, name: 仕佳光子,  layer: 硅光/光芯片 }
+
+  - id: semi-equipment
+    name_zh: 半导体设备与材料
+    description: 国产半导体设备、材料、零部件
+    keywords: [光刻机, 刻蚀, 薄膜沉积, 光刻胶, 大硅片, 零部件, 国产替代]
+    layers:
+      - 关键材料 (硅片/光刻胶/特气)
+      - 核心零部件
+      - 整机设备
+      - 晶圆代工
+      - 封测
+    representative_tickers:
+      - { ticker: 002371.SZ, name: 北方华创,  layer: 整机设备 }
+      - { ticker: 688012.SH, name: 中微公司,  layer: 刻蚀设备 }
+      - { ticker: 688072.SH, name: 拓荆科技,  layer: 薄膜沉积 }
+      - { ticker: 300604.SZ, name: 长川科技,  layer: 测试设备 }
+      - { ticker: 688126.SH, name: 沪硅产业,  layer: 大硅片 }
+      - { ticker: 688200.SH, name: 华峰测控,  layer: 测试设备 }
+
+  - id: robotics
+    name_zh: 机器人
+    description: 人形机器人 / 工业机器人产业链
+    keywords: [人形机器人, 谐波减速器, 行星滚柱丝杠, 六维力传感, 灵巧手, Optimus]
+    layers:
+      - 减速器/丝杠/电机
+      - 传感器
+      - 控制器/算法
+      - 整机/系统集成
+      - 应用场景
+    representative_tickers:
+      - { ticker: 688017.SH, name: 绿的谐波,  layer: 谐波减速器 }
+      - { ticker: 601689.SH, name: 拓普集团,  layer: 零部件 (汽车/机器人) }
+      - { ticker: 603728.SH, name: 鸣志电器,  layer: 电机 }
+      - { ticker: 300660.SZ, name: 江苏雷利,  layer: 电机 }
+      - { ticker: 603667.SH, name: 五洲新春,  layer: 丝杠 }
+
+  - id: energy-storage
+    name_zh: 储能与电力设备
+    description: 大储、户储、电力变压器、AI 数据中心电力
+    keywords: [储能, 电池, 逆变器, 变压器, 数据中心电力, GW 级储能]
+    layers:
+      - 上游材料 (锂/正负极/电解液)
+      - 电芯
+      - 电池系统 PCS/BMS
+      - 变压器/开关柜
+      - 应用 (电网/数据中心/户用)
+    representative_tickers:
+      - { ticker: 300274.SZ, name: 阳光电源,    layer: 逆变器/PCS }
+      - { ticker: 300750.SZ, name: 宁德时代,    layer: 电芯 }
+      - { ticker: 002028.SZ, name: 思源电气,    layer: 变压器/开关柜 }
+      - { ticker: 688676.SH, name: 金盘科技,    layer: 数据中心电源 }
+      - { ticker: 600522.SH, name: 中天科技,    layer: 海缆/电力线 }
+
+  - id: solid-state-battery
+    name_zh: 固态电池
+    description: 全固态/半固态电池产业链
+    keywords: [固态电池, 全固态, 硫化锂, 硫化物电解质, 干法电极]
+    layers:
+      - 电解质材料 (硫化物/氧化物)
+      - 正极/负极材料
+      - 设备 (干法电极/叠片)
+      - 电池整机
+      - 整车应用
+    representative_tickers:
+      - { ticker: 300073.SZ, name: 当升科技,  layer: 正极材料 }
+      - { ticker: 688005.SH, name: 容百科技,  layer: 正极 }
+      - { ticker: 688778.SH, name: 厦钨新能,  layer: 正负极 }
+      - { ticker: 300409.SZ, name: 道氏技术,  layer: 固态电解质 }
+
+  - id: low-altitude
+    name_zh: 低空经济
+    description: eVTOL、无人机、低空空管
+    keywords: [eVTOL, 低空经济, 无人机, 通用航空, 复合材料]
+    layers:
+      - 复合材料/电机/电控
+      - 电池系统
+      - 飞控/航电
+      - 整机
+      - 空管/基础设施
+    representative_tickers:
+      - { ticker: 000099.SZ, name: 中信海直,  layer: 直升机运营 }
+      - { ticker: 002085.SZ, name: 万丰奥威,  layer: 通用航空整机 }
+      - { ticker: 300699.SZ, name: 光威复材,  layer: 碳纤维复材 }
+      - { ticker: 688631.SH, name: 莱斯信息,  layer: 航空空管 }
+
+  - id: domestic-software
+    name_zh: 信创 / 国产软件
+    description: 国产数据库、操作系统、办公软件、工业软件
+    keywords: [信创, 国产替代, 数据库, 操作系统, 工业软件]
+    layers:
+      - 基础软件 (OS/DB/中间件)
+      - 工业软件 (CAD/CAE/MES)
+      - 办公/协同
+      - 网络安全
+      - 行业应用
+    representative_tickers:
+      - { ticker: 600536.SH, name: 中国软件,  layer: OS/中间件 }
+      - { ticker: 688111.SH, name: 金山办公,  layer: 办公软件 }
+      - { ticker: 600588.SH, name: 用友网络,  layer: ERP }
+      - { ticker: 002405.SZ, name: 四维图新,  layer: 高精度地图/智驾 }
+
+  - id: military-tech
+    name_zh: 国防科技 / 商业航天
+    description: 卫星互联网、商业航天、军工电子
+    keywords: [卫星互联网, 商业航天, 军工电子, 雷达, 复合材料, 钛合金]
+    layers:
+      - 上游材料 (钛合金/复合材料/特种金属)
+      - 关键零部件 (导航/雷达/动力)
+      - 整机集成
+      - 卫星/航天发射
+      - 应用场景
+    representative_tickers:
+      - { ticker: 600760.SH, name: 中航沈飞,  layer: 航空整机 }
+      - { ticker: 688375.SH, name: 国博电子,  layer: 雷达/微波 }
+      - { ticker: 000733.SZ, name: 振华科技,  layer: 军工电子 }
+      - { ticker: 600118.SH, name: 中国卫星,  layer: 卫星 }
+      - { ticker: 688122.SH, name: 西部超导,  layer: 钛合金 }
+
+  - id: biotech-ai
+    name_zh: AI + 生物科技
+    description: AI 制药、合成生物、脑机接口
+    keywords: [AI 制药, 合成生物, 脑机接口, 类器官, 生物计算]
+    layers:
+      - 工具/试剂
+      - 合成平台/算法
+      - 临床前研发
+      - 临床试验
+      - 商业化
+    representative_tickers:
+      - { ticker: 603259.SH, name: 药明康德,  layer: CXO }
+      - { ticker: 002821.SZ, name: 凯莱英,    layer: CXO }
+      - { ticker: 300676.SZ, name: 华大基因,  layer: 测序/工具 }
+      - { ticker: 300558.SZ, name: 贝达药业,  layer: 创新药 }
+
+# ============================================================
+# Maintenance notes
+# ============================================================
+# - When a representative ticker no longer fits (sold core business, 退市
+#   risk, etc.), 删除或替换
+# - When a new structural theme emerges (e.g., 量子计算 / 6G), add new entry
+# - representative_tickers 数量在 4-7 之间合适 — 太少候选池不够，太多 token 浪费
+# - 不要把超大盘股 (如茅台 / 五粮液) 列入题材代表，它们走自己的 /analyze 路径
