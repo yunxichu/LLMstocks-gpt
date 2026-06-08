@@ -1,8 +1,8 @@
 # LLMstocks-gpt 升级计划
 
-> 版本：v1.0-draft  
+> 版本：v1.1-draft
 > 创建：2026-06-08  
-> 目标：在原 LLMstocks 的轻量 Claude 选股 SOP 上，新增三条硬证据轴：主流机构评测、顶级投资人持仓、产业链供需分析。最终输出仍然是可锁定、可复盘、可追溯的股票研究清单，而不是不可验证的主观推荐。
+> 目标：在原 LLMstocks 的轻量 Claude 选股 SOP 上，新增三条硬证据轴：主流机构评测、顶级投资人持仓、产业链供需分析；并加入 AI 爆发期的供应链瓶颈估值框架。最终输出仍然是可锁定、可复盘、可追溯的股票研究清单，而不是不可验证的主观推荐。
 
 ---
 
@@ -22,6 +22,7 @@ LLMstocks-gpt 要新增：
 - **顶级投资人轴**：追踪长期业绩强、风格稳定、持仓披露可靠的投资人和基金经理，识别增持、减持、首次建仓、集中度和拥挤交易。
 - **产业链供需轴**：从公司公告、行业协会、海关、统计局、产业组织、上下游上市公司披露中建立“需求、供给、价格、库存、产能、订单”证据链。
 - **研报级估值轴**：每个目标价必须有最新财报锚、3-5 个可信研报/一致预期输入、FY2026/FY2027 EPS 或净利预测桥、估值方法、目标价分歧、上修/下修触发器和证据等级。
+- **AI 结构性瓶颈轴**：对 AI 类股票新增 3-5 年结构性可选性判断，识别 HBM、先进封装、PCB/载板、光模块、服务器、电力、液冷、半导体设备、软件等节点的真实瓶颈和稀缺性溢价。
 - **综合判断轴**：把上面三类证据与基本面、估值、红旗扫描合并，输出明确的 BUY / WATCH / AVOID 判断及置信度。
 
 ---
@@ -48,6 +49,9 @@ LLMstocks-gpt 要新增：
 
 7. **目标价必须可审计**  
    目标价不能只来自 `forward PE` 或单一券商观点。必须说明 EPS/净利如何预测、为什么给这个估值倍数、外部目标价分歧在哪里、哪些财报指标会触发上修或下修。
+
+8. **AI 不按普通周期机械估值**
+   AI 基础设施建设正在表现为全球 capex 军备竞赛，不能只用短期 PE 把所有 AI 链条高估值标的打成 AVOID。必须额外判断它是否控制真实瓶颈、瓶颈能持续多久、能否落实到收入/毛利/现金流，以及当前价格是否已经超过结构性牛市情景。
 
 ---
 
@@ -83,6 +87,19 @@ supply_demand:
   supply_signals: []
   price_inventory_signals: []
   bottleneck_or_surplus: bottleneck|balanced|surplus|unknown
+
+ai_supply_chain_review:
+  status: complete|partial|unavailable
+  structural_horizon_years: 3-5
+  chain_node: hbm|advanced-packaging|substrate|pcb|optical|server|power|cooling|semiconductor-equipment|software|robotics|other
+  ai_demand_evidence: []
+  bottleneck_evidence: []
+  customer_capacity_evidence: []
+  financial_translation: {}
+  bottleneck_score: {}
+  bottleneck_score_total: 0
+  scarcity_premium: {}
+  structural_verdict: structural_buy|watch|avoid
 
 gpt_scorecard:
   fundamentals: 0-20
@@ -210,6 +227,20 @@ target_price_review:
 - 证据等级：财报、研报、行业数据、一致预期分别标 `hard|soft|pending_verify|unavailable`。
 
 详见 `playbooks/references/valuation-target-price.md` 和 `templates/valuation_card.yaml`。
+
+### 4.5 AI 爆发期供应链瓶颈
+
+AI 类股票不能只回答“是不是 AI 概念”，必须回答：
+
+- 下游 capex 是否真实加速：NVIDIA、Microsoft、Alphabet、Meta、Amazon、Broadcom、TSMC、SK hynix 等结果或指引。
+- 供应链节点是否真瓶颈：HBM、CoWoS/2.5D/3D 封装、IC 载板、PCB、光模块、电力、液冷、设备、软件生态。
+- 公司是否占住该节点：公告、年报、季报、投资者关系记录、客户验证、产能利用率、订单、capex、毛利率。
+- 财务是否能兑现：收入桥、ASP、毛利率、扣非利润、现金流、折旧、定增摊薄。
+- 当前股价是否仍低于结构性牛市情景。
+
+新增 `playbooks/references/ai-supply-chain-boom-framework.md`，并在
+`templates/picks_card.yaml`、`templates/valuation_card.yaml`、`tools/lock_picks.py`
+中强制 AI picks 填写 `ai_supply_chain_review`。
 
 ---
 

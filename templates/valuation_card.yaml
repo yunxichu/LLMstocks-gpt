@@ -27,6 +27,25 @@ target_price_review:
     justification: ""
     formula: ""
 
+  # For AI-chain names only. Keep 12M target price separate from 3-5Y
+  # structural option value.
+  structural_option_value:
+    applicable: false
+    horizon_years: null
+    chain_node: ""             # hbm | advanced-packaging | substrate | pcb | optical | server | power | cooling | semiconductor-equipment | software | robotics | other
+    option_value_target: null
+    probability_of_success: null
+    capex_dilution_penalty: null
+    calculation: ""
+    source: ""
+
+  ai_scarcity_premium:
+    applicable: false
+    ai_bottleneck_score: null
+    premium_to_normal_multiple: null
+    evidence: []
+    discounts: []
+
   eps_forecast_bridge:
     latest_actual:
       fiscal_period: ""

@@ -4,7 +4,7 @@
 > Frequency: 每周日 / 用户手动触发
 > Output: 一份含 3 类 × 5 支共 15 支的清单 + 市场背景 + 交互式 HTML 报告
 
-This is the **PRIMARY pipeline** of the project. v0.8 起产出 3 类 picks:
+This is the **PRIMARY pipeline** of the project. v1.1 起产出 3 类 picks:
 1. **AI 相关推荐 (ai_picks, 5 支)** — 限 AI 相关主题
 2. **全市场推荐 (market_picks, 5 支)** — 非 AI 主题（含 watchlist 单独名）
 3. **过热不推荐 (avoid_picks, 5 支)** — 不限主题
@@ -12,13 +12,13 @@ This is the **PRIMARY pipeline** of the project. v0.8 起产出 3 类 picks:
 每只 pick 经过 18 类 red flag 全扫 + evidence_log 强制溯源。最终 lock + 渲染
 HTML 报告（点击式可展开详细分析）。
 
-> **v0.8 升级**: buy_picks (5) → ai_picks (5) + market_picks (5)。新增 HTML
-> 报告输出 (`tools/render_picks_html.py`)。selection 顺序: AVOID → AI → 全市场
+> **v1.1 升级**: AI picks 引入 `ai_supply_chain_review`，把 12M 估值和 3-5Y
+> AI 结构性可选性分开判断。selection 顺序: AVOID → AI 结构性瓶颈 → 全市场
 > (不重叠)。
 
 ### AI Themes 定义
 
-`AI_THEMES = {ai-compute, optical-cpo, semi-equipment, robotics, domestic-software}`
+`AI_THEMES = {ai-compute, advanced-packaging, pcb-substrate, optical-cpo, semi-equipment, data-center-power, cooling, robotics, domestic-software}`
 
 非 AI themes: energy-storage, solid-state-battery, low-altitude, military-tech, biotech-ai。
 
@@ -43,6 +43,11 @@ HTML 报告（点击式可展开详细分析）。
   - target price 必须包含研究报告矩阵、FY2026/FY2027 EPS 或净利预测桥、估值方法、目标价分歧、上修/下修触发器、证据等级。
   - 如果没有至少 3 个可信研报/一致预期输入，`target_price_review.status` 必须是 `provisional`，不能写成 `research_grade`。
   - 每只 AVOID 必须填写 `valuation_red_flag.fair_value_or_risk_range`，说明为什么现价透支。
+- **★ v1.1 AI supply-chain boom discipline**:
+  - 每只 `ai_picks` 必须填写 `ai_supply_chain_review`。
+  - 必须分开写 `near-term 12M target` 与 `3-5Y structural option`。
+  - 高估值不能机械等于 AVOID；若 `ai_bottleneck_score >= 80` 且有硬证据证明瓶颈、客户/产能和财务传导，可进入 WATCH/BUY。
+  - 但如果当前价格已经接近或超过结构性牛市情景，仍然必须标 WATCH/AVOID，不能用“AI 会很大”替代估值。
 - **★ v0.8 NEW: 3 类约束**
   - `ai_picks` 必须 5 支（或更少有诚实理由），每只 `theme` 必须 ∈ AI_THEMES
   - `market_picks` 必须 5 支，每只 `theme` 必须 ∉ AI_THEMES (或空表示 watchlist)
@@ -61,8 +66,9 @@ HTML 报告（点击式可展开详细分析）。
 4. `references/research-rubric.md` — 单股评分维度（v0.5 16 维）
 5. `references/a-share-data-sources.md` — yfinance + WebFetch 来源
 6. `references/valuation-target-price.md` — 目标价 / 估值强制标准
-7. `templates/picks_card.yaml` — 输出模板
-8. `templates/valuation_card.yaml` — 目标价估值子模板
+7. `references/ai-supply-chain-boom-framework.md` — AI 爆发与供应链瓶颈估值标准
+8. `templates/picks_card.yaml` — 输出模板
+9. `templates/valuation_card.yaml` — 目标价估值子模板
 
 ---
 
@@ -86,7 +92,7 @@ urls = announcement.disclosure_urls_for('600519.SH')
 
 ---
 
-## 3. Workflow (6 stages)
+## 3. Workflow (7 stages)
 
 ### Stage 1: 候选池构建 (target 30-80 tickers)
 
@@ -97,6 +103,7 @@ Sources to combine:
 | User watchlist | Read `watchlist/watchlist.yaml` |
 | Active themes | Read `config/themes.yaml`, expand each active theme to its representative tickers |
 | US sector leaders' A-share peers | Check NVDA / AMD / TSLA / AVGO / ASML / TSM 1-month price action; if a US sector ran +20% with no A-share peer move, surface A-share peers |
+| AI capex leaders | Check NVDA / MSFT / GOOGL / META / AMZN / AVGO / TSM / SK hynix latest results and guidance |
 | WebFetch 财联社 hot news (last 7 days) | `https://www.cls.cn/` — note tickers mentioned in major stories |
 | WebFetch 新浪财经 hot stocks | `https://finance.sina.com.cn/realstock/company/sh000001/nc.shtml` (热门股) |
 | Recent earnings outliers (last 14 days) | WebFetch 巨潮 / 新浪 announcement search for "业绩预告" + 业绩快报 outliers |
@@ -233,7 +240,48 @@ For each candidate, build evidence_log with:
 - "行业政策即将出台" / "美联储将降息" → SOFT
 - "解禁/减持/质押公告" → HARD (公告日期 + URL 已拿到), 但具体规模可能 PENDING_VERIFY 如果未读全文
 
-### Stage 4c: Target price valuation (★ v1.0 强制要求)
+### Stage 4c: AI supply-chain boom review (★ v1.1 强制要求)
+
+For every AI candidate, build `ai_supply_chain_review` according to
+`references/ai-supply-chain-boom-framework.md`.
+
+Minimum output:
+
+```yaml
+ai_supply_chain_review:
+  status: complete | partial | unavailable
+  structural_horizon_years: 3-5
+  chain_node: hbm | advanced-packaging | substrate | pcb | optical | server | power | cooling | semiconductor-equipment | software | robotics | other
+  ai_demand_evidence: []
+  bottleneck_evidence: []
+  customer_capacity_evidence: []
+  financial_translation: {}
+  bottleneck_score: {}
+  bottleneck_score_total: 0
+  scarcity_premium: {}
+  structural_verdict: structural_buy | watch | avoid
+  thesis_breakers: []
+  open_checks: []
+```
+
+Required source checks:
+
+1. Hyperscaler / AI leader demand:
+   - NVIDIA, Microsoft, Alphabet, Meta, Amazon, Broadcom, TSMC, SK hynix.
+2. Bottleneck evidence:
+   - TrendForce / SEMI / WSTS / IEA / Uptime / company filings.
+3. Company-level translation:
+   - annual report, quarterly report, IR record, utilization, capex, customer
+     qualification, backlog, gross margin, or product ASP.
+
+Scoring:
+
+- `ai_bottleneck_score >= 85`: strategic bottleneck; scarcity premium can be large.
+- `70-84`: strong AI node; BUY/WATCH depends on price.
+- `55-69`: plausible beneficiary; no multiple override unless near-term earnings are also improving.
+- `<55`: theme exposure only; normal valuation discipline applies.
+
+### Stage 4d: Target price valuation (★ v1.0 + v1.1 强制要求)
 
 For every AI / market candidate that may become BUY or WATCH, build
 `target_price_review` according to `references/valuation-target-price.md`.
@@ -275,11 +323,12 @@ Rules:
 - If Wind / Choice / FactSet / LSEG I/B/E/S / Bloomberg is unavailable, write this explicitly and use `provisional`.
 - Broker research is never copied into the repo. Store only metadata and short paraphrased assumptions.
 - If a BUY has less than 15% upside to base target, it must have `evidence_quality=high`; otherwise route to WATCH.
+- For AI candidates, attach `structural_option_value` and `ai_scarcity_premium` when the chain review allows a scarcity premium.
 - For AVOID candidates, build `valuation_red_flag` with fair-value/risk range, method, and reversal conditions.
 
 ### Stage 5: 选 5 AVOID + 5 AI + 5 全市场 (顺序 important)
 
-**v0.8 selection order**: AVOID 先选 → AI BUY 再选 → 全市场 BUY 最后选 (在
+**v1.1 selection order**: AVOID 先选 → AI 结构性瓶颈 BUY 再选 → 全市场 BUY 最后选 (在
 非 AI 剩余 + 已 ban 的 AI ticker 之外)。**目的：确保 3 list 不重叠** + 让最严重
 的警惕信号先被锁定再做 BUY 配对。
 
@@ -292,17 +341,20 @@ Rules:
 
 #### Step 5b: AI Picks 5 支 (限 AI_THEMES, 不在 AVOID list)
 
-- AI_THEMES = {ai-compute, optical-cpo, semi-equipment, robotics, domestic-software}
+- AI_THEMES = {ai-compute, advanced-packaging, pcb-substrate, optical-cpo, semi-equipment, data-center-power, cooling, robotics, domestic-software}
 - 候选来源: Stage 3 BUY 候选中 theme ∈ AI_THEMES 的
 - 必要条件: `red_flags_triggered` 0 HIGH + ≤1 MEDIUM
 - 排除: 已在 AVOID list 中的 ticker
-- 排序: initial_score × strategy multiplier
+- 排序: initial_score × strategy multiplier × AI bottleneck multiplier
   - CHOKEPOINT ×1.2（小盘隐性卡点优先）
   - QUALITY_COMPOUNDER ×1.0
   - VALUE ×1.0
   - SPECIAL_SITUATION ×1.1
+  - AI bottleneck score ≥85 ×1.25
+  - AI bottleneck score 70-84 ×1.10
+  - AI bottleneck score <55 ×0.70
 - 取前 5
-- 5 只之间 sub-theme (ai-compute vs robotics vs optical-cpo) 分布合理
+- 5 只之间 sub-theme (compute / advanced packaging / PCB / optical / power / cooling / software / robotics) 分布合理
 
 #### Step 5c: Market Picks 5 支 (非 AI_THEMES, 不与 AI / AVOID 重叠)
 
@@ -345,6 +397,9 @@ This validates:
 - Every entry has `red_flags_checked = [1..18]` + valid `evidence_log` (≥3 hard)
 - Every AI / market entry has `target_price_review` with status, EPS bridge,
   research-report matrix, valuation method, target range, and revision triggers
+- Every AI entry has `ai_supply_chain_review` with bottleneck score, chain node,
+  demand/bottleneck/customer evidence, financial translation, scarcity premium
+  policy, structural verdict, and thesis breakers
 - Every AVOID entry has `valuation_red_flag.fair_value_or_risk_range`
 - Computes SHA-256 of raw.md, records playbook_version
 - Appends 15 rows to `predictions/picks_index.csv`
@@ -365,7 +420,7 @@ Tracking: `update_tracking.py` 自动跟踪 ai_picks + market_picks + avoid_pick
 ## 4. Judgment Framework
 
 ### 4.1 BUY confidence calibration
-- `≥ 0.7`: 多 strategy 共振 + 红旗全清 + 明确近期 catalyst
+- `≥ 0.7`: 多 strategy 共振 + 红旗全清 + 明确近期 catalyst；AI 类还需瓶颈分 >=70
 - `0.5-0.7`: 主 strategy 强 + 红旗清 + 中期 catalyst
 - `0.4-0.5`: 偏好但 catalyst 弱 → 仍可入 BUY，标 "long-term hold"
 - `< 0.4`: 不应进 BUY 清单（即使 red flag 都清，也是 "watch")
@@ -389,6 +444,7 @@ Tracking: `update_tracking.py` 自动跟踪 ai_picks + market_picks + avoid_pick
 - 个股停牌 > 5 个交易日
 - ST 警示
 - 出现新的重大 thesis-breaking 事件
+- 对 AI BUY：核心瓶颈解除、关键客户砍单、产能爬坡失败、或 capex/折旧吞掉毛利率
 - 对 AVOID：如个股出现明显反转（如重磅利好公告 + 涨停），可标 AVOID 失败提前结案
 
 ---
@@ -397,7 +453,7 @@ Tracking: `update_tracking.py` 自动跟踪 ai_picks + market_picks + avoid_pick
 
 ### 5.1 Structured (picks_card.yaml)
 
-See `templates/picks_card.yaml` — 含 LOCK area + 10 entries (5 BUY + 5 AVOID),
+See `templates/picks_card.yaml` — 含 LOCK area + 15 entries (5 AI + 5 market + 5 AVOID),
 each with required fields including `red_flags_checked` (all 18) and
 `red_flags_triggered` (specific list with evidence).
 

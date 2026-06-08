@@ -26,6 +26,8 @@ A target price must include all of the following:
    - At least one primary method and one cross-check.
    - Explain why the method fits the industry.
    - Show the formula.
+   - For AI-chain names, also separate the 12M earnings target from the 3-5Y
+     structural option value defined in `ai-supply-chain-boom-framework.md`.
 
 5. **Target-price dispersion**
    - External high / median / mean / low target price when available.
@@ -120,12 +122,54 @@ Minimum rule:
 
 ---
 
-## 4. Valuation Method by Business Type
+## 4. AI Structural Option Valuation
+
+For AI-related businesses, a 12M target price is not enough. Always show:
+
+```text
+near_term_value = forecast_EPS × justified_PE
+
+structural_ai_value =
+  probability_of_bottleneck_success × option_value
+  - probability_of_execution_failure × capex_dilution_penalty
+
+ai_adjusted_target =
+  near_term_value + structural_ai_value
+```
+
+Rules:
+
+- The AI structural option is valid only when the company has a specific chain
+  node, not generic "AI exposure".
+- Scarcity premiums must come from hard evidence: customer pull, capacity
+  allocation, utilization, qualification progress, pricing, backlog, or capex
+  tied to demand.
+- High PE alone cannot force AVOID if `ai_bottleneck_score >= 80` and current
+  price is still below the structural bull case.
+- High PE remains a red flag if the stock already trades near or above the
+  structural bull case, or if financial translation is missing.
+
+Allowed multiple premium:
+
+| AI bottleneck score | Premium to normal multiple |
+|---:|---:|
+| 85-100 | +30% to +60% |
+| 70-84 | +15% to +30% |
+| 55-69 | 0% to +15% only with improving near-term numbers |
+| <55 | 0% |
+
+The premium must be reduced for customer concentration, capex/depreciation,
+dilution, weak cash conversion, export-control risk, and peer overexpansion.
+
+---
+
+## 5. Valuation Method by Business Type
 
 | Business type | Primary method | Cross-check | Notes |
 |---|---|---|---|
 | Quality software / SaaS | PE on normalized EPS, DCF | EV/Sales, PEG | Use subscription growth, retention, margin expansion. |
 | AI server / electronics manufacturing | PE, EV/EBITDA | ROE / FCF, peer comps | Apply customer concentration and margin discount. |
+| AI bottleneck / strategic scarcity | PE + structural option, SOTP | EV/Sales, capex ROI, backlog | Use only when `ai_supply_chain_review` proves the bottleneck. |
 | Semiconductor equipment | PE, EV/Sales / EV/EBITDA | backlog, order growth | High multiples require order visibility. |
 | Optical modules / CPO | forward PE, PEG | customer capex, inventory | Apply cycle and price-pressure discount after sharp rallies. |
 | Batteries / energy storage | PE, EV/EBITDA | DCF, commodity sensitivity | Model ASP, utilization, raw-material cost, overseas policy. |
@@ -137,7 +181,7 @@ Minimum rule:
 
 ---
 
-## 5. Formulas
+## 6. Formulas
 
 ### PE
 
@@ -196,7 +240,7 @@ Use when segments have clearly different economics, such as hardware + software,
 
 ---
 
-## 6. Target-Price Construction
+## 7. Target-Price Construction
 
 Use base / bull / bear:
 
@@ -229,6 +273,18 @@ target_price_review:
     primary: ""
     cross_checks: []
     justification: ""
+  structural_option_value:
+    horizon_years: null
+    chain_node: ""
+    option_value_target: null
+    probability_of_success: null
+    capex_dilution_penalty: null
+    source: ""
+  ai_scarcity_premium:
+    applicable: false
+    ai_bottleneck_score: null
+    premium_to_normal_multiple: null
+    evidence: []
   eps_forecast_bridge: {}
   research_report_matrix: {}
   revision_triggers:
@@ -250,7 +306,7 @@ target_price_review:
 
 ---
 
-## 7. AVOID Valuation
+## 8. AVOID Valuation
 
 AVOID names still need valuation work. Use:
 
@@ -273,7 +329,7 @@ Examples:
 
 ---
 
-## 8. Hard Rejection Rules
+## 9. Hard Rejection Rules
 
 Reject or downgrade target-price confidence when:
 
@@ -283,15 +339,17 @@ Reject or downgrade target-price confidence when:
 - The target price is copied from one broker without explanation.
 - The report stores paywalled research text, charts, or tables beyond short metadata.
 - Valuation method is mismatched to the business model.
+- An AI stock uses scarcity premium without an `ai_supply_chain_review`.
 - BUY target upside is below 15% and evidence quality is not high.
 - AVOID has no fair-value/risk range.
 
 ---
 
-## 9. Sources and Methodology References
+## 10. Sources and Methodology References
 
 - CFA Institute equity valuation process: https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/equity-valuation-applications-and-processes
 - CFA Institute valuation concepts and basic tools: https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2025/equity-valuation-concepts-basic-tools
 - LSEG I/B/E/S Estimates overview: https://www.lseg.com/en/data-analytics/financial-data/company-data/ibes-estimates
 - FactSet point-in-time consensus overview: https://insight.factset.com/resources/at-a-glance-factset-estimates-point-in-time-consensus
 - Morningstar equity methodology overview: https://indexes.morningstar.com/docs/calculation-and-methodology/morningstar-equity-research-methodology
+- AI supply-chain boom framework: `playbooks/references/ai-supply-chain-boom-framework.md`

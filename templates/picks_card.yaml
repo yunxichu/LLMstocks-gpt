@@ -1,4 +1,4 @@
-# Weekly Picks Card Template (v0.8: 3 lists × 5 each = 15 picks)
+# Weekly Picks Card Template (v1.1: AI supply-chain boom aware)
 # ============================================================
 # Filled by Claude via /picks; locked by `tools/lock_picks.py`.
 # This is a SINGLE file containing 15 tickers' picks:
@@ -33,8 +33,17 @@ lock:
   short_list_size: 0
   red_flag_categories_scanned: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 
-  # 3-class structure (v0.8)
-  ai_themes_used: ["ai-compute", "optical-cpo", "semi-equipment", "robotics", "domestic-software"]
+  # 3-class structure (v1.1)
+  ai_themes_used:
+    - "ai-compute"
+    - "advanced-packaging"
+    - "pcb-substrate"
+    - "optical-cpo"
+    - "semi-equipment"
+    - "data-center-power"
+    - "cooling"
+    - "robotics"
+    - "domestic-software"
 
   success_criteria: "BUY (ai + market): T+20 个股相对沪深 300 超额 > 0%；AVOID: T+20 个股跑输沪深 300"
   failure_criteria: "BUY: T+20 超额 < -5% 或个股 < -10%；AVOID: T+20 超额 > +5%"
@@ -53,6 +62,11 @@ market_context:
   active_themes: []
   recent_significant_events: []
   us_leaders_observed: []
+  ai_mega_cycle_evidence:
+    hyperscaler_capex: []
+    chipmaker_results: []
+    supply_chain_bottlenecks: []
+    power_constraints: []
 
 # ----------------------------------------------------------------------------
 # AI picks (5) — 限 AI 相关主题
@@ -62,7 +76,7 @@ ai_picks:
   - rank: 1
     ticker: ""                # e.g., "601138.SH"
     name: ""
-    theme: ""                 # MUST be one of: ai-compute / optical-cpo / semi-equipment / robotics / domestic-software
+    theme: ""                 # MUST be one of lock.ai_themes_used
     strategy: ""              # CHOKEPOINT | QUALITY_COMPOUNDER | VALUE | SPECIAL_SITUATION
     pattern_matched: ""
 
@@ -102,6 +116,40 @@ ai_picks:
       evidence_grade: {}
       open_checks: []
 
+    # ★ v1.1 AI supply-chain boom review
+    # Required for every ai_picks entry. See:
+    # playbooks/references/ai-supply-chain-boom-framework.md
+    ai_supply_chain_review:
+      status: "unavailable"    # complete | partial | unavailable
+      structural_horizon_years: "3-5"
+      chain_node: ""           # hbm | advanced-packaging | substrate | pcb | optical | server | power | cooling | semiconductor-equipment | software | robotics | other
+      ai_demand_evidence: []
+      bottleneck_evidence: []
+      customer_capacity_evidence: []
+      financial_translation:
+        revenue_bridge: ""
+        margin_bridge: ""
+        capex_or_depreciation: ""
+        utilization_or_backlog: ""
+        evidence_grade: "pending_verify"
+      bottleneck_score:
+        end_market_capex: 0
+        node_bottleneck: 0
+        architecture_lock_in: 0
+        customer_capacity: 0
+        financial_translation: 0
+        supply_expansion_risk: 0
+        capital_validation: 0
+        rerating_optionality: 0
+      bottleneck_score_total: 0
+      scarcity_premium:
+        multiple_override_allowed: false
+        allowed_premium_to_normal_multiple: "0%"
+        conditions: []
+      structural_verdict: "watch"  # structural_buy | watch | avoid
+      thesis_breakers: []
+      open_checks: []
+
     # 强制红旗扫描记录
     red_flags_checked: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
     red_flags_triggered: []   # BUY: 0 HIGH + ≤1 MEDIUM only
@@ -123,7 +171,7 @@ market_picks:
   - rank: 1
     ticker: ""
     name: ""
-    theme: ""                 # non-AI theme (energy-storage / solid-state-battery / low-altitude / military-tech / biotech-ai / "" for watchlist standalone)
+    theme: ""                 # non-AI theme (energy-storage if not AI-data-center driven / solid-state-battery / low-altitude / military-tech / biotech-ai / "" for watchlist standalone)
     strategy: ""
     pattern_matched: ""
 
@@ -214,7 +262,7 @@ selection_process:
     - us_leaders_mapping: 0
     - news_hot_stocks: 0
   short_list_rationale: ""
-  selection_order: "v0.8: AVOID first → AI picks → market picks (ensures no overlap)"
+  selection_order: "v1.1: AVOID first → AI structural picks → market picks (ensures no overlap)"
   excluded_high_score_ai: []
   excluded_high_score_market: []
   excluded_low_score_avoid: []

@@ -31,6 +31,40 @@ themes:
       - { ticker: 603019.SH, name: 中科曙光,  layer: 服务器整机 }
       - { ticker: 002463.SZ, name: 沪电股份,  layer: PCB }
 
+  - id: advanced-packaging
+    name_zh: AI 先进封装 / 封测
+    description: CoWoS/Chiplet/FCBGA/Bumping/高端测试等 AI 加速器封测链条
+    keywords: [先进封装, CoWoS, Chiplet, FCBGA, Bumping, 封测, HBM, 2.5D, 3D封装]
+    layers:
+      - 晶圆凸块 / Bumping
+      - 2.5D/3D 先进封装
+      - FCBGA / 高端载板协同
+      - 晶圆测试 / 成品测试
+      - OSAT 产能外溢
+    representative_tickers:
+      - { ticker: 002156.SZ, name: 通富微电,  layer: OSAT/先进封装 }
+      - { ticker: 600584.SH, name: 长电科技,  layer: OSAT/先进封装 }
+      - { ticker: 688362.SH, name: 甬矽电子,  layer: 封测 }
+      - { ticker: 002185.SZ, name: 华天科技,  layer: 封测 }
+      - { ticker: 300604.SZ, name: 长川科技,  layer: 测试设备 }
+
+  - id: pcb-substrate
+    name_zh: AI PCB / IC 载板
+    description: AI 服务器、高速网络、光模块和先进封装拉动的高多层 PCB、HDI、IC 载板与 FCBGA
+    keywords: [AI PCB, 高多层板, HDI, IC载板, FCBGA, ABF, 光模块PCB, 1.6T]
+    layers:
+      - 高多层 PCB
+      - HDI
+      - IC 载板 / BT / ABF
+      - FCBGA
+      - 光模块 PCB / 测试板
+    representative_tickers:
+      - { ticker: 002463.SZ, name: 沪电股份,  layer: 高多层 PCB }
+      - { ticker: 300476.SZ, name: 胜宏科技,  layer: 高阶 PCB/HDI }
+      - { ticker: 002916.SZ, name: 深南电路,  layer: PCB/封装基板 }
+      - { ticker: 002436.SZ, name: 兴森科技,  layer: IC载板/FCBGA/测试板 }
+      - { ticker: 688183.SH, name: 生益电子,  layer: PCB }
+
   - id: optical-cpo
     name_zh: 光通信 / CPO
     description: 光模块、光器件、CPO 共封装光学
@@ -100,6 +134,39 @@ themes:
       - { ticker: 002028.SZ, name: 思源电气,    layer: 变压器/开关柜 }
       - { ticker: 688676.SH, name: 金盘科技,    layer: 数据中心电源 }
       - { ticker: 600522.SH, name: 中天科技,    layer: 海缆/电力线 }
+
+  - id: data-center-power
+    name_zh: AI 数据中心电力
+    description: AI 数据中心电力容量、并网、变压器、开关、UPS、储能和 HVDC
+    keywords: [数据中心电力, AI电力, 变压器, 开关柜, UPS, HVDC, 配电, 并网, 储能]
+    layers:
+      - 电网接入 / 变电
+      - 变压器 / 开关柜
+      - UPS / HVDC
+      - PCS / 储能
+      - 线缆 / 铜排 / 母线
+    representative_tickers:
+      - { ticker: 002028.SZ, name: 思源电气,  layer: 变压器/开关/电力设备 }
+      - { ticker: 688676.SH, name: 金盘科技,  layer: 数据中心变压器/干变 }
+      - { ticker: 300274.SZ, name: 阳光电源,  layer: PCS/储能 }
+      - { ticker: 002335.SZ, name: 科华数据,  layer: UPS/数据中心电源 }
+      - { ticker: 600522.SH, name: 中天科技,  layer: 电力线缆/海缆 }
+
+  - id: cooling
+    name_zh: AI 液冷 / 热管理
+    description: 高功率 AI 服务器推动的液冷、冷板、CDU、机房温控和热管理
+    keywords: [液冷, 冷板, CDU, 浸没式液冷, 数据中心温控, AI服务器散热, 热管理]
+    layers:
+      - 冷板 / 管路 / 快接头
+      - CDU / 液冷系统
+      - 机房空调 / 温控
+      - 服务器热管理
+      - 数据中心集成
+    representative_tickers:
+      - { ticker: 002837.SZ, name: 英维克,    layer: 数据中心温控/液冷 }
+      - { ticker: 300499.SZ, name: 高澜股份,  layer: 液冷/热管理 }
+      - { ticker: 301018.SZ, name: 申菱环境,  layer: 温控设备 }
+      - { ticker: 002050.SZ, name: 三花智控,  layer: 热管理零部件 }
 
   - id: solid-state-battery
     name_zh: 固态电池

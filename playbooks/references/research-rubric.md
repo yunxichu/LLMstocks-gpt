@@ -8,9 +8,10 @@ Use this rubric when:
 Adapted from Serenity's 15-dimension chokepoint rubric; A-share-specific
 dimensions added (policy alignment, disclosure transparency).
 
-> **v0.5 note**: Smart-money-quality dimension removed because 公募季报重仓 /
-> QFII 持仓 data is not accessible from overseas environments. The rubric is
-> now 16 dimensions, total 80.
+> **v1.1 note**: AI-related candidates must add the dedicated
+> `ai_supply_chain_review` from `ai-supply-chain-boom-framework.md`. The
+> original chokepoint rubric remains useful, but AI names now receive a
+> separate 0-100 bottleneck score before valuation.
 
 ---
 
@@ -76,6 +77,40 @@ Reject or heavily discount ideas where:
 - 无法回答 "why this company, not the obvious giant?"
 - 唯一边缘是某网红 / 大 V 提过
 - 仅靠"市场会注意到"作为催化剂
+
+---
+
+## AI Mega-Cycle Overlay (v1.1)
+
+Use this overlay for any candidate tagged:
+
+`ai-compute`, `advanced-packaging`, `pcb-substrate`, `optical-cpo`,
+`semi-equipment`, `data-center-power`, `cooling`, `robotics`,
+`domestic-software`.
+
+Do not score AI names only with traditional PE discipline. First ask whether
+the company controls a scarce node in the AI infrastructure buildout.
+
+Required overlay:
+
+| Overlay Item | Required Question |
+|---|---|
+| Capex pull | Which AI leader or hyperscaler capex/result proves demand is rising now? |
+| Exact node | Is this HBM, CoWoS/advanced packaging, substrate, PCB, optical, server, power, cooling, equipment, or software? |
+| Bottleneck | Is capacity constrained, pre-booked, qualification-limited, power-limited, or architecture-limited? |
+| Customer/capacity proof | Does the company disclose utilization, capex, orders, qualification, customer type, or product ramp? |
+| Financial bridge | How does the node change revenue, ASP, gross margin, EPS, cash flow, or ROIC? |
+| Scarcity premium | Can the stock deserve a multiple premium versus normal sector valuation? Why? |
+| Thesis breaker | What would prove AI demand is not translating to this company? |
+
+Decision impact:
+
+- `ai_bottleneck_score >= 85`: high PE alone should not force AVOID; evaluate
+  structural option value and current price versus bull case.
+- `70-84`: strong WATCH/BUY candidate if near-term valuation is not already
+  near the structural bull case.
+- `55-69`: do not give a multiple override unless earnings are also improving.
+- `<55`: treat as normal theme exposure; strict valuation applies.
 
 ---
 

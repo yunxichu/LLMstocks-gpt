@@ -14,6 +14,7 @@ What it does:
    - AVOID 类: ≥1 HIGH or ≥2 MEDIUM with evidence
    - evidence_log: ≥3 type='hard' entries per pick
    - target_price_review for AI / market picks
+   - ai_supply_chain_review for AI picks
    - valuation_red_flag for AVOID picks
    - ai_picks ∩ market_picks ticker set = ∅
 3. Computes SHA-256 of accompanying raw.md
@@ -78,14 +79,40 @@ REQUIRED_AVOID_FIELDS = [
 PICKS_ID_PATTERN = re.compile(r"^picks-\d{8}-\d{6}$")
 ALL_RED_FLAG_CATEGORIES = list(range(1, 19))  # 1..18
 
-# v0.8: AI themes for ai_picks vs market_picks validation
-AI_THEMES = {"ai-compute", "optical-cpo", "semi-equipment", "robotics", "domestic-software"}
+# v1.1: AI themes for ai_picks vs market_picks validation
+AI_THEMES = {
+    "ai-compute",
+    "advanced-packaging",
+    "pcb-substrate",
+    "optical-cpo",
+    "semi-equipment",
+    "data-center-power",
+    "cooling",
+    "robotics",
+    "domestic-software",
+}
+AI_CHAIN_NODES = {
+    "hbm",
+    "advanced-packaging",
+    "substrate",
+    "pcb",
+    "optical",
+    "server",
+    "power",
+    "cooling",
+    "semiconductor-equipment",
+    "software",
+    "robotics",
+    "other",
+}
 
 EVIDENCE_VALID_TYPES = {"hard", "soft", "pending_verify"}
 MIN_HARD_EVIDENCE_PER_PICK = 3
 MAX_PICKS_PER_LIST = 5
 TARGET_PRICE_STATUSES = {"research_grade", "provisional", "unavailable"}
 RESEARCH_MATRIX_STATUSES = {"complete", "partial", "unavailable"}
+AI_SUPPLY_CHAIN_STATUSES = {"complete", "partial", "unavailable"}
+AI_STRUCTURAL_VERDICTS = {"structural_buy", "watch", "avoid"}
 
 
 def git_sha_for(path: Path) -> str:
@@ -133,7 +160,7 @@ def validate_top_lock(lock: dict) -> list[str]:
             f"red_flag_categories_scanned must be [1..18]; got {scanned}"
         )
 
-    # v0.8: ai_themes_used must match AI_THEMES exactly
+    # v1.1: ai_themes_used must match AI_THEMES exactly
     declared_ai = set(lock.get("ai_themes_used") or [])
     if declared_ai != AI_THEMES:
         errors.append(
@@ -301,6 +328,117 @@ def validate_target_price_review(review, label: str) -> list[str]:
     return errors
 
 
+def validate_ai_supply_chain_review(review, label: str) -> list[str]:
+    """v1.1 AI structural bottleneck validation for AI BUY entries."""
+    errors: list[str] = []
+    if not isinstance(review, dict) or not review:
+        return [f"{label}.ai_supply_chain_review missing or not a dict"]
+
+    status = review.get("status")
+    if status not in AI_SUPPLY_CHAIN_STATUSES:
+        errors.append(
+            f"{label}.ai_supply_chain_review.status must be one of "
+            f"{sorted(AI_SUPPLY_CHAIN_STATUSES)}; got {status!r}"
+        )
+    if status == "unavailable":
+        errors.append(
+            f"{label}.ai_supply_chain_review.status cannot be unavailable for "
+            f"ai_picks; use partial if some checks are incomplete"
+        )
+
+    chain_node = review.get("chain_node")
+    if chain_node not in AI_CHAIN_NODES:
+        errors.append(
+            f"{label}.ai_supply_chain_review.chain_node must be one of "
+            f"{sorted(AI_CHAIN_NODES)}; got {chain_node!r}"
+        )
+
+    for k in [
+        "ai_demand_evidence",
+        "bottleneck_evidence",
+        "customer_capacity_evidence",
+        "thesis_breakers",
+    ]:
+        v = review.get(k)
+        if not isinstance(v, list) or (k != "thesis_breakers" and not v):
+            errors.append(f"{label}.ai_supply_chain_review.{k} must be a non-empty list")
+
+    financial = review.get("financial_translation")
+    if not isinstance(financial, dict) or not financial:
+        errors.append(f"{label}.ai_supply_chain_review.financial_translation missing")
+    else:
+        if not (financial.get("revenue_bridge") or "").strip():
+            errors.append(
+                f"{label}.ai_supply_chain_review.financial_translation.revenue_bridge missing"
+            )
+        if financial.get("evidence_grade") not in EVIDENCE_VALID_TYPES:
+            errors.append(
+                f"{label}.ai_supply_chain_review.financial_translation.evidence_grade "
+                f"must be one of {sorted(EVIDENCE_VALID_TYPES)}"
+            )
+
+    score = review.get("bottleneck_score")
+    required_score_keys = [
+        "end_market_capex",
+        "node_bottleneck",
+        "architecture_lock_in",
+        "customer_capacity",
+        "financial_translation",
+        "supply_expansion_risk",
+        "capital_validation",
+        "rerating_optionality",
+    ]
+    if not isinstance(score, dict):
+        errors.append(f"{label}.ai_supply_chain_review.bottleneck_score missing")
+    else:
+        for k in required_score_keys:
+            try:
+                value = float(score.get(k))
+            except Exception:
+                errors.append(
+                    f"{label}.ai_supply_chain_review.bottleneck_score.{k} must be numeric"
+                )
+                continue
+            if value < 0:
+                errors.append(
+                    f"{label}.ai_supply_chain_review.bottleneck_score.{k} cannot be negative"
+                )
+
+    try:
+        total = float(review.get("bottleneck_score_total"))
+        if total < 0 or total > 100:
+            errors.append(
+                f"{label}.ai_supply_chain_review.bottleneck_score_total must be 0-100"
+            )
+    except Exception:
+        errors.append(
+            f"{label}.ai_supply_chain_review.bottleneck_score_total must be numeric"
+        )
+
+    premium = review.get("scarcity_premium")
+    if not isinstance(premium, dict) or not premium:
+        errors.append(f"{label}.ai_supply_chain_review.scarcity_premium missing")
+    else:
+        if not isinstance(premium.get("multiple_override_allowed"), bool):
+            errors.append(
+                f"{label}.ai_supply_chain_review.scarcity_premium."
+                "multiple_override_allowed must be boolean"
+            )
+        if not isinstance(premium.get("conditions"), list):
+            errors.append(
+                f"{label}.ai_supply_chain_review.scarcity_premium.conditions must be a list"
+            )
+
+    verdict = review.get("structural_verdict")
+    if verdict not in AI_STRUCTURAL_VERDICTS:
+        errors.append(
+            f"{label}.ai_supply_chain_review.structural_verdict must be one of "
+            f"{sorted(AI_STRUCTURAL_VERDICTS)}; got {verdict!r}"
+        )
+
+    return errors
+
+
 def validate_valuation_red_flag(red_flag, label: str) -> list[str]:
     """v1.0 fair-value / overvaluation validation for AVOID entries."""
     errors: list[str] = []
@@ -415,6 +553,12 @@ def validate_pick_entry(entry: dict, verdict: str, idx: int) -> list[str]:
         errors.extend(
             validate_target_price_review(entry.get("target_price_review"), label)
         )
+        if verdict == "ai":
+            errors.extend(
+                validate_ai_supply_chain_review(
+                    entry.get("ai_supply_chain_review"), label
+                )
+            )
     else:
         errors.extend(
             validate_valuation_red_flag(entry.get("valuation_red_flag"), label)

@@ -38,6 +38,7 @@ References:
 - `references/pattern-library.md` — 14 reusable patterns
 - `references/a-share-data-sources.md` — yfinance + WebFetch source priority
 - `references/valuation-target-price.md` — target price, EPS bridge, research matrix, and revision triggers
+- `references/ai-supply-chain-boom-framework.md` — AI 3-5Y structural option and bottleneck scoring
 
 ---
 
@@ -164,6 +165,30 @@ If you cannot name a specific demand shock, the analysis is weak. Mark
 - Forward P/E vs growth path (from `stock_info.trailingPE` + financials growth)
 - Replacement value (from balance sheet)
 
+### Step 9a — AI supply-chain structural option (AI names only)
+
+If the demand shock is AI-related, use
+`references/ai-supply-chain-boom-framework.md` before target-price valuation.
+
+Required:
+
+- Identify the exact AI chain node: HBM / advanced packaging / substrate / PCB /
+  optical / server / power / cooling / semiconductor equipment / software /
+  robotics / other.
+- Record capex and demand evidence from AI leaders or hyperscalers.
+- Record bottleneck evidence from industry institutions or company filings.
+- Record customer/capacity evidence from company filings, IR, utilization,
+  capex, qualification, backlog, or product ramp.
+- Build a financial translation bridge: revenue, ASP, gross margin, EPS, cash
+  flow, capex, depreciation or dilution.
+- Score `ai_bottleneck_score` 0-100 and state whether scarcity premium is
+  allowed.
+
+Do not mechanically label an AI name AVOID only because PE is high. If
+`ai_bottleneck_score >= 80`, compare current price with both the 12M base target
+and the 3-5Y structural bull case. If current price already exceeds the
+structural bull case, AVOID still applies.
+
 ### Step 9b — Build target price valuation
 
 Use `references/valuation-target-price.md` and `templates/valuation_card.yaml`.
@@ -175,6 +200,8 @@ Required:
 - If report access is unavailable, explicitly set `research_report_matrix.status: partial` or `unavailable`.
 - FY2026/FY2027 EPS or net-profit forecast bridge.
 - Primary valuation method + at least one cross-check.
+- For AI names, include `structural_option_value` and `ai_scarcity_premium`
+  when the chain review supports it.
 - External target-price dispersion when available.
 - Base / bull / bear target price.
 - Upward and downward revision triggers.
