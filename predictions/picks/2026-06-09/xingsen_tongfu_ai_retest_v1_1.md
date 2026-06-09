@@ -1,8 +1,8 @@
 # 兴森科技、通富微电 AI 供应链框架重测 v1.1
 
-> 日期：2026-06-09  
-> 方法：`ai-supply-chain-boom-framework.md` + `valuation-target-price.md`  
-> 价格基准：yfinance 2026-06-09 收盘  
+> 日期：2026-06-09
+> 方法：`ai-supply-chain-boom-framework.md` + `valuation-target-price.md`
+> 价格基准：yfinance 2026-06-09 收盘
 > 输出性质：`provisional`，不构成投资建议；本次没有 Wind / Choice / Bloomberg / FactSet / LSEG I/B/E/S 授权一致预期终端。
 
 ---
