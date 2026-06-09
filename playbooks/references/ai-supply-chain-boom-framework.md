@@ -38,9 +38,78 @@ no proven node, no customer/capacity evidence, or no financial translation.
 
 ---
 
-## 2. The New Mental Model
+## 2. Future-Backcast First
 
-### 2.1 Two Time Scales
+Do not begin with today's ticker list. Begin with the AI world 3-5 years out,
+then work backward.
+
+### 2.1 Base Future State: 2028-2030 AI World
+
+Use this as the default prior unless current evidence changes:
+
+```text
+AI moves from model training as the center of gravity
+-> to always-on inference, reasoning, agents, video, robotics and enterprise workflow automation
+-> AI factories become power-dense, rack-scale industrial infrastructure
+-> chip design moves toward GPU + custom ASIC + HBM + advanced packaging
+-> cluster performance depends on memory bandwidth, packaging, networking, PCB/substrate, power and cooling
+-> national AI stacks increase demand for domestic substitutes in China
+```
+
+The future world is therefore not just "more GPUs". It is:
+
+- more accelerated servers and custom ASICs;
+- more HBM and memory bandwidth;
+- more 2.5D/3D packaging and substrate area;
+- more high-speed PCB, connectors, optics and switching;
+- more data-center power, cooling, grid equipment and energy storage;
+- more domestic AI infrastructure where export controls limit direct access;
+- more software that embeds AI into real workflow distribution.
+
+### 2.2 Future-Backcast Questions
+
+For every AI candidate, answer in this order:
+
+1. What must be much larger in the 2028-2030 AI world?
+2. Which physical or software node becomes constrained if that future arrives?
+3. Is the constraint scarce, qualified, capacity-limited, power-limited or
+   architecture-locked?
+4. Does this company own capacity, know-how, customer qualification, or
+   domestic substitution value at that node?
+5. Can the future node become revenue, margin, EPS and cash flow for this
+   company, not just market narrative?
+6. Is today's price still below the future-backed base case, or already near
+   the future bull case?
+
+### 2.3 Future-Backcast Score
+
+Each AI candidate can receive a 0-100 `future_backcast_score`.
+
+| Dimension | Points | What To Prove |
+|---|---:|---|
+| Future demand inevitability | 15 | The node must expand materially if AI inference/agents/data centers scale. |
+| Node criticality in future AI architecture | 20 | The node is structurally required, not optional or easily designed out. |
+| Company positioning and qualification path | 15 | Current products, capex, customers, validation or technical capability map to the future node. |
+| Financial translation path | 15 | There is a credible bridge to revenue, margin, EPS, cash flow and ROIC. |
+| Scarcity and pricing power | 10 | Supply cannot catch up easily; switching/qualification/lead time protects returns. |
+| Domestic strategic value | 10 | China localization, export controls or strategic customers make the node more valuable. |
+| Balance-sheet and capex survivability | 5 | The company can fund the transition without excessive dilution or financial stress. |
+| Current pricing gap | 10 | The market is not already pricing the future bull case. |
+
+Interpretation:
+
+| Score | Future-Backcast View |
+|---:|---|
+| 85-100 | Core future infrastructure candidate; staged BUY can be justified even if 12M upside is modest. |
+| 70-84 | Strong candidate; BUY on pullback or proof, WATCH+ if already near 12M fair value. |
+| 55-69 | Real option, but execution proof is required before treating it as core. |
+| <55 | Theme exposure only; do not use the future story to override valuation. |
+
+---
+
+## 3. The New Mental Model
+
+### 3.1 Two Time Scales
 
 Every AI pick now has two separate views:
 
@@ -60,7 +129,7 @@ Do not collapse them into one number. A stock can be:
 - `near_term_avoid + structural_watch`: good story, price already in bull case.
 - `near_term_avoid + structural_avoid`: theme-only or overbuilt.
 
-### 2.2 Bottleneck First, Ticker Second
+### 3.2 Bottleneck First, Ticker Second
 
 Start with the supply-chain node, not the stock:
 
@@ -79,7 +148,7 @@ The correct question is:
 
 ---
 
-## 3. AI Bottleneck Score
+## 4. AI Bottleneck Score
 
 Each AI candidate must receive a 0-100 `ai_bottleneck_score`.
 
@@ -105,7 +174,7 @@ Interpretation:
 
 ---
 
-## 4. Scarcity Premium Rules
+## 5. Scarcity Premium Rules
 
 Traditional valuation:
 
@@ -122,7 +191,7 @@ target_price =
   - probability_of_execution_failure × capex_dilution_penalty
 ```
 
-### 4.1 When A Multiple Override Is Allowed
+### 5.1 When A Multiple Override Is Allowed
 
 Allow an AI scarcity premium only when all are true:
 
@@ -154,7 +223,7 @@ Apply discounts for:
 - export controls or geopolitics;
 - management credibility gaps.
 
-### 4.2 When High PE Is Still A Red Flag
+### 5.2 When High PE Is Still A Red Flag
 
 High PE remains dangerous when:
 
@@ -168,7 +237,7 @@ High PE remains dangerous when:
 
 ---
 
-## 5. Required Output Field
+## 6. Required Output Field
 
 Every AI pick must include:
 
@@ -196,6 +265,16 @@ ai_supply_chain_review:
     capital_validation: 0
     rerating_optionality: 0
   bottleneck_score_total: 0
+  future_backcast_score:
+    future_demand_inevitability: 0
+    node_criticality: 0
+    company_positioning: 0
+    financial_translation_path: 0
+    scarcity_pricing_power: 0
+    domestic_strategic_value: 0
+    capex_survivability: 0
+    current_pricing_gap: 0
+  future_backcast_score_total: 0
   scarcity_premium:
     multiple_override_allowed: false
     allowed_premium_to_normal_multiple: "0%"
@@ -207,7 +286,7 @@ ai_supply_chain_review:
 
 ---
 
-## 6. Decision Upgrade Rules
+## 7. Decision Upgrade Rules
 
 Use both valuation and AI structural score:
 
@@ -224,9 +303,20 @@ bottleneck can prevent a stock from being mechanically labeled AVOID just
 because 12M PE is high.** It cannot, however, turn an unproven theme stock into
 a BUY.
 
+Future-backcast override:
+
+- If `future_backcast_score >= 85`, 12M target upside is allowed to be modest
+  if the current price is far below the 3-5Y base case.
+- If `future_backcast_score` is 70-84, do not chase price above the 12M fair
+  range unless fresh hard evidence raises the financial translation path.
+- If `future_backcast_score` is 55-69, treat the stock as an option, not a
+  core holding.
+- If current price already approaches the 3-5Y bull case, downgrade to WATCH
+  or AVOID regardless of the future story.
+
 ---
 
-## 7. Source Anchors
+## 8. Source Anchors
 
 - NVIDIA FY2027 Q1 results: https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-First-Quarter-Fiscal-2027/default.aspx
 - Microsoft FY2026 Q3 results: https://www.microsoft.com/en-us/investor/earnings/fy-2026-q3/press-release-webcast
